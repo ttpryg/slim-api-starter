@@ -1,3 +1,4 @@
 /vendor/
 .env
 .docker-compose.local.yml
+.phpunit.result.cache
