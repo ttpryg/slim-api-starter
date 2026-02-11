@@ -5,8 +5,15 @@ declare(strict_types=1);
 use DI\ContainerBuilder;
 use Slim\App;
 use Slim\Factory\AppFactory;
+use Dotenv\Dotenv;
 
 require __DIR__ . '/../vendor/autoload.php';
+
+// Load .env file
+if (file_exists(__DIR__ . '/../.env')) {
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+    $dotenv->load();
+}
 
 $containerBuilder = new ContainerBuilder();
 
