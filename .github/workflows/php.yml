@@ -22,7 +22,7 @@ jobs:
         coverage: none # or xdebug, pcov
 
     - name: Install Composer Dependencies
-      run: composer install --no-dev --prefer-dist --no-progress
+      run: composer install --prefer-dist --no-progress
 
     - name: Run PHPUnit Tests
       run: ./vendor/bin/phpunit
