@@ -1,0 +1,23 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Specific handling for PHP and web files
+*.php text diff=php
+*.json text
+*.yml text
+*.yaml text
+*.md text
+*.conf text
+*.xml text
+
+# Ensure shell scripts and Dockerfiles always use LF
+*.sh text eol=lf
+Dockerfile text
+
+# Graphics/Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
