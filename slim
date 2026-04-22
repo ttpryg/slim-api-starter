@@ -1,13 +1,18 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/config/bootstrap.php';
+require __DIR__.'/config/bootstrap.php';
 
+use App\Commands\MakeActionCommand;
+use App\Commands\MakeModelCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application('Slim API Starter', 'v1.0');
 
-// ... register commands
-$application->addCommand(new \App\Commands\MakeActionCommand());
+// register commands
+$application->addCommands([
+    new MakeActionCommand,
+    new MakeModelCommand,
+]);
 
 exit($application->run());
