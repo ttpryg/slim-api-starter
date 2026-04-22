@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Test;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Psr7\Factory\ServerRequestFactory;
-use Psr\Http\Message\ServerRequestInterface as Request;
 
 abstract class TestCase extends PHPUnitTestCase
 {
     protected function getAppInstance(): App
     {
-        return require __DIR__ . '/../config/bootstrap.php';
+        return require __DIR__.'/../config/bootstrap.php';
     }
 
     protected function createRequest(
@@ -23,7 +23,7 @@ abstract class TestCase extends PHPUnitTestCase
         array $cookies = [],
         array $serverParams = []
     ): Request {
-        $factory = new ServerRequestFactory();
+        $factory = new ServerRequestFactory;
         $request = $factory->createServerRequest($method, $path, $serverParams);
 
         foreach ($headers as $name => $value) {

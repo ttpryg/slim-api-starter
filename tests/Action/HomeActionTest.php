@@ -8,13 +8,13 @@ use App\Test\TestCase;
 
 class HomeActionTest extends TestCase
 {
-    public function testHomeActionReturnsHelloWorld(): void
+    public function test_home_action_returns_hello_world(): void
     {
         $app = $this->getAppInstance();
         $request = $this->createRequest('GET', '/');
         $response = $app->handle($request);
 
-        $payload = (string)$response->getBody();
+        $payload = (string) $response->getBody();
         $expectedPayload = json_encode(['message' => 'Hello World!']);
 
         $this->assertEquals(200, $response->getStatusCode());

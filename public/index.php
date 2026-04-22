@@ -1,8 +1,9 @@
 <?php
 
 declare(strict_types=1);
+use Slim\App;
 
-/** @var \Slim\App $app */
-$app = require __DIR__ . '/../config/bootstrap.php';
+/** @var App $app */
+$app = require __DIR__.'/../config/bootstrap.php';
 
 $app->run();

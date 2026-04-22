@@ -3,25 +3,25 @@
 declare(strict_types=1);
 
 use DI\ContainerBuilder;
-use Slim\Factory\AppFactory;
 use Dotenv\Dotenv;
+use Slim\Factory\AppFactory;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 // Load .env file
-if (file_exists(__DIR__ . '/../.env')) {
-    $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+if (file_exists(__DIR__.'/../.env')) {
+    $dotenv = Dotenv::createImmutable(__DIR__.'/../');
     $dotenv->load();
 }
 
-$containerBuilder = new ContainerBuilder();
+$containerBuilder = new ContainerBuilder;
 
 // Set up settings
-$settings = require __DIR__ . '/../config/settings.php';
+$settings = require __DIR__.'/../config/settings.php';
 $containerBuilder->addDefinitions($settings);
 
 // Set up dependencies
-$dependencies = require __DIR__ . '/../config/dependencies.php';
+$dependencies = require __DIR__.'/../config/dependencies.php';
 $dependencies($containerBuilder);
 
 // Build PHP-DI Container instance
@@ -32,7 +32,7 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 
 // Register routes
-$routes = require __DIR__ . '/../config/routes.php';
+$routes = require __DIR__.'/../config/routes.php';
 $routes($app);
 
 // Add Routing Middleware
