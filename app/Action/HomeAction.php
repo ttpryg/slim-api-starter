@@ -14,6 +14,6 @@ final class HomeAction
 
     public function __invoke(Request $request, Response $response): Response
     {
-        return $this->success($response, ['message' => 'Hello World!']);
+        return $this->success($response, null, 'Hello World!');
     }
 }

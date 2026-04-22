@@ -13,7 +13,7 @@ trait ResponseTrait
      */
     protected function json(Response $response, mixed $data, int $status = 200): Response
     {
-        $response->getBody()->write(json_encode($data));
+        $response->getBody()->write(json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
 
         return $response
             ->withHeader('Content-Type', 'application/json')

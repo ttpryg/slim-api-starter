@@ -19,10 +19,10 @@ class HomeActionTest extends TestCase
 
         $payload = (string) $response->getBody();
 
-        // Generate expected payload dynamically using the trait
         $expectedResponse = $this->success(
             $app->getResponseFactory()->createResponse(),
-            ['message' => 'Hello World!']
+            null,
+            'Hello World!'
         );
         $expectedPayload = (string) $expectedResponse->getBody();
 
