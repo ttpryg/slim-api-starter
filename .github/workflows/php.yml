@@ -45,5 +45,8 @@ jobs:
     - name: Copy env file
       run: cp .env.example .env
 
+    - name: Run Phinx Migrations
+      run: ./vendor/bin/phinx
+
     - name: Run PHPUnit Tests
       run: ./vendor/bin/phpunit

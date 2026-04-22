@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use DI\ContainerBuilder;
-use Slim\App;
 use Slim\Factory\AppFactory;
 use Dotenv\Dotenv;
 
