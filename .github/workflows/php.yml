@@ -45,6 +45,9 @@ jobs:
     - name: Copy env file
       run: cp .env.example .env
 
+    - name: Check style code
+      run: composer run style-check
+
     - name: Run Phinx Migrations
       run: ./vendor/bin/phinx
 

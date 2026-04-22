@@ -1,13 +1,13 @@
 <?php
 
 $configDir = __DIR__;
-$settings = require $configDir . '/config/settings.php';
+$settings = require $configDir.'/config/settings.php';
 $db = $settings['database'];
 
 return [
     'paths' => [
         'migrations' => '%%PHINX_CONFIG_DIR%%/db/migrations',
-        'seeds' => '%%PHINX_CONFIG_DIR%%/db/seeds'
+        'seeds' => '%%PHINX_CONFIG_DIR%%/db/seeds',
     ],
     'environments' => [
         'default_migration_table' => 'migrations',
@@ -38,7 +38,7 @@ return [
             'pass' => $db['password'],
             'port' => $db['port'],
             'charset' => $db['charset'],
-        ]
+        ],
     ],
-    'version_order' => 'creation'
+    'version_order' => 'creation',
 ];
