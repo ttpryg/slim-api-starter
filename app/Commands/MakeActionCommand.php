@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'make:action',
     description: 'Creates a new action class',
 )]
-class MakeActionCommand extends Command
+class MakeActionCommand extends GeneratorCommand
 {
     protected function configure(): void
     {
@@ -25,39 +25,19 @@ class MakeActionCommand extends Command
     {
         $name = $input->getArgument('name');
 
-        // Remove .php extension if provided
-        $name = str_replace('.php', '', $name);
+        $details = $this->resolveClassDetails($name, 'App\\Action', __DIR__.'/../Action', 'Action');
 
-        // Helper to convert snake_case or kebab-case to PascalCase
-        $studly = function ($string) {
-            $string = ucwords(str_replace(['-', '_'], ' ', $string));
+        if (! $details) {
+            $output->writeln('<error>Invalid action name.</error>');
 
-            return str_replace(' ', '', $string);
-        };
-
-        $parts = array_filter(explode('/', str_replace('\\', '/', $name)), fn ($p) => ! in_array($p, ['', '.', '..'], true));
-        $parts = array_map($studly, $parts);
-        $className = array_pop($parts);
-
-        // Ensure class name ends with Action
-        if (! str_ends_with($className, 'Action')) {
-            $className .= 'Action';
+            return Command::FAILURE;
         }
 
-        $namespace = 'App\\Action';
-        $path = __DIR__.'/../Action';
+        extract($details);
 
-        if (! empty($parts)) {
-            $subNamespace = implode('\\', $parts);
-            $namespace .= '\\'.$subNamespace;
-            $path .= '/'.implode('/', $parts);
+        if (! $this->makeDirectory($path, $output)) {
+            return Command::FAILURE;
         }
-
-        if (! is_dir($path)) {
-            mkdir($path, 0755, true);
-        }
-
-        $filePath = $path.'/'.$className.'.php';
 
         if (file_exists($filePath)) {
             $output->writeln("<error>Action {$name} already exists!</error>");
