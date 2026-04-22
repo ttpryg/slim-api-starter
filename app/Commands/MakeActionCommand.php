@@ -24,42 +24,44 @@ class MakeActionCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getArgument('name');
-        
+
         // Remove .php extension if provided
         $name = str_replace('.php', '', $name);
-        
+
         // Helper to convert snake_case or kebab-case to PascalCase
         $studly = function ($string) {
             $string = ucwords(str_replace(['-', '_'], ' ', $string));
+
             return str_replace(' ', '', $string);
         };
 
-        $parts = array_filter(explode('/', str_replace('\\', '/', $name)), fn($p) => !in_array($p, ['', '.', '..'], true));
+        $parts = array_filter(explode('/', str_replace('\\', '/', $name)), fn ($p) => ! in_array($p, ['', '.', '..'], true));
         $parts = array_map($studly, $parts);
         $className = array_pop($parts);
 
         // Ensure class name ends with Action
-        if (!str_ends_with($className, 'Action')) {
+        if (! str_ends_with($className, 'Action')) {
             $className .= 'Action';
         }
 
         $namespace = 'App\\Action';
-        $path = __DIR__ . '/../Action';
-        
-        if (!empty($parts)) {
+        $path = __DIR__.'/../Action';
+
+        if (! empty($parts)) {
             $subNamespace = implode('\\', $parts);
-            $namespace .= '\\' . $subNamespace;
-            $path .= '/' . implode('/', $parts);
+            $namespace .= '\\'.$subNamespace;
+            $path .= '/'.implode('/', $parts);
         }
 
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             mkdir($path, 0755, true);
         }
 
-        $filePath = $path . '/' . $className . '.php';
+        $filePath = $path.'/'.$className.'.php';
 
         if (file_exists($filePath)) {
             $output->writeln("<error>Action {$name} already exists!</error>");
+
             return Command::FAILURE;
         }
 
@@ -88,6 +90,7 @@ EOF;
 
         if (file_put_contents($filePath, $stub) === false) {
             $output->writeln("<error>Failed to write action file to {$filePath}</error>");
+
             return Command::FAILURE;
         }
 
