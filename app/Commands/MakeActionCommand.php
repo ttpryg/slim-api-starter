@@ -72,17 +72,19 @@ declare(strict_types=1);
 
 namespace {$namespace};
 
+use App\Traits\ResponseTrait;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 final class {$className}
 {
+    use ResponseTrait;
+
     public function __invoke(Request \$request, Response \$response): Response
     {
         // TODO: Implement action logic here
         
-        \$response->getBody()->write(json_encode(['message' => 'Action executed successfully']));
-        return \$response->withHeader('Content-Type', 'application/json');
+        return \$this->success(\$response, null, 'Action executed successfully');
     }
 }
 
