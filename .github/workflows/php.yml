@@ -1,4 +1,4 @@
-name: PHP CI
+name: PHP Tests
 
 on:
   push:
@@ -7,8 +7,12 @@ on:
     branches: ["develop"]
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.2', '8.3', '8.4', '8.5']
 
     services:
       mysql:
@@ -30,7 +34,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.2'
+        php-version: ${{ matrix.php-version }}
         extensions: mbstring, pdo_mysql, pdo_sqlite, zip, intl
         ini-values: post_max_size=256M, upload_max_filesize=256M
         coverage: none
