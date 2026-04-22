@@ -17,9 +17,8 @@ return function (ContainerBuilder $containerBuilder) {
 
             $capsule->setEventDispatcher(new Dispatcher(new Container()));
 
-            $capsule->setAsGlobal();
-
             $capsule->bootEloquent();
+            $capsule->setAsGlobal();
 
             return $capsule;
         },
