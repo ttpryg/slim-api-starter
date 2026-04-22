@@ -10,4 +10,4 @@ $application = new Application('Slim API Starter', 'v1.0');
 // ... register commands
 $application->addCommand(new \App\Commands\MakeActionCommand());
 
-$application->run();
+exit($application->run());

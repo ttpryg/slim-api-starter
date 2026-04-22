@@ -34,7 +34,7 @@ class MakeActionCommand extends Command
             return str_replace(' ', '', $string);
         };
 
-        $parts = explode('/', str_replace('\\', '/', $name));
+        $parts = array_filter(explode('/', str_replace('\\', '/', $name)), fn($p) => !in_array($p, ['', '.', '..'], true));
         $parts = array_map($studly, $parts);
         $className = array_pop($parts);
 
@@ -53,7 +53,7 @@ class MakeActionCommand extends Command
         }
 
         if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+            mkdir($path, 0755, true);
         }
 
         $filePath = $path . '/' . $className . '.php';
@@ -86,7 +86,10 @@ final class {$className}
 
 EOF;
 
-        file_put_contents($filePath, $stub);
+        if (file_put_contents($filePath, $stub) === false) {
+            $output->writeln("<error>Failed to write action file to {$filePath}</error>");
+            return Command::FAILURE;
+        }
 
         $output->writeln("<info>Action created successfully: {$namespace}\\{$className}</info>");
 
