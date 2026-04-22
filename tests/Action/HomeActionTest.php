@@ -15,7 +15,13 @@ class HomeActionTest extends TestCase
         $response = $app->handle($request);
 
         $payload = (string) $response->getBody();
-        $expectedPayload = json_encode(['message' => 'Hello World!']);
+        $expectedPayload = json_encode([
+            'success' => true,
+            'message' => 'Success',
+            'data' => [
+                'message' => 'Hello World!',
+            ],
+        ]);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->getHeaderLine('Content-Type'));
