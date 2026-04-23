@@ -25,7 +25,10 @@ class LogsClearCommand extends Command
             return Command::SUCCESS;
         }
 
-        $files = glob($logsPath.'/*.log');
+        $files = glob($logsPath.'/app*');
+        $files = array_filter($files, function ($file) {
+            return basename($file) !== '.gitkeep' && is_file($file);
+        });
 
         if (empty($files)) {
             $output->writeln('<info>No log files found.</info>');
@@ -35,8 +38,9 @@ class LogsClearCommand extends Command
 
         $deletedCount = 0;
         foreach ($files as $file) {
-            if (is_file($file) && unlink($file)) {
+            if (unlink($file)) {
                 $deletedCount++;
+                $output->writeln('<comment>Deleted:</comment> '.basename($file));
             }
         }
 

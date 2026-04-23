@@ -45,7 +45,7 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
    ```
 3. Install dependencies using composer (inside the container):
    ```bash
-   docker exec -it slim-api-starter-app-1 composer install
+   docker exec -it slim_app composer install
    ```
 4. Access the API at URL: `http://localhost:8080`
 
@@ -69,7 +69,7 @@ This project has a built-in CLI (`./slim`) to help accelerate the development pr
 All CLI commands can be executed inside the container:
 
 ```bash
-docker exec -it slim-api-starter-app-1 php slim list
+docker exec -it slim_app php slim list
 ```
 
 ### Generator Commands
@@ -101,7 +101,7 @@ This project is integrated with **Laravel Pint** to maintain code neatness (PSR-
 All test files are placed in the `tests/` directory and tested using PHPUnit.
 
 ```bash
-docker exec -it slim-api-starter-app-1 composer test
+docker exec -it slim_app composer test
 ```
 
 ## Architectural Notes
@@ -115,6 +115,6 @@ This project uses the **ADR** pattern as an alternative to conventional MVC for 
 ## Common Container Commands
 
 - **View App Logs (Docker)**: `docker compose logs -f app`
-- **Enter Container Shell**: `docker exec -it slim-api-starter-app-1 bash`
-- **Update Composer**: `docker exec -it slim-api-starter-app-1 composer update`
-- **Refresh Autoloader**: `docker exec -it slim-api-starter-app-1 composer dump-autoload`
+- **Enter Container Shell**: `docker exec -it slim_app bash`
+- **Update Composer**: `docker exec -it slim_app composer update`
+- **Refresh Autoloader**: `docker exec -it slim_app composer dump-autoload`
