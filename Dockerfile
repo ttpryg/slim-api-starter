@@ -19,17 +19,30 @@ RUN docker-php-ext-install \
     zip
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy composer files first for better caching
-COPY composer.json ./
+# Copy composer files first (biar cache optimal)
+COPY composer.json composer.lock ./
 
-# Install dependencies
-RUN composer install --no-interaction --no-plugins --no-scripts --prefer-dist --verbose
+# Install dependencies (vendor dibuat di image, aman dari permission issue)
+RUN composer install \
+    --no-interaction \
+    --no-scripts \
+    --prefer-dist
 
-# Copy the rest of the application
+# Copy seluruh source code
 COPY . .
 
-RUN chown -R www-data:www-data /var/www/html
+# Fix permission hanya untuk folder yang butuh write
+RUN mkdir -p storage/logs \
+    && chown -R www-data:www-data storage \
+    && chmod -R 775 storage
+
+# Gunakan user non-root (lebih aman)
+USER www-data
+
+EXPOSE 9000
+
+CMD ["php-fpm"]
