@@ -9,9 +9,10 @@ return [
         'logError' => true,
         'logErrorDetails' => true,
         'logger' => [
-            'name' => 'slim-app',
-            'path' => __DIR__.'/../storage/logs/app.log',
+            'name' => 'slim',
+            'path' => __DIR__.'/../storage/logs/app',
             'level' => Level::Debug,
+            'maxFiles' => 14,
         ],
     ],
 

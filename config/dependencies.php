@@ -6,7 +6,7 @@ use DI\ContainerBuilder;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
-use Monolog\Handler\StreamHandler;
+use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
@@ -22,7 +22,11 @@ return function (ContainerBuilder $containerBuilder) {
             $processor = new UidProcessor;
             $logger->pushProcessor($processor);
 
-            $handler = new StreamHandler($settings['path'], $settings['level']);
+            $handler = new RotatingFileHandler(
+                $settings['path'],
+                $settings['maxFiles'],
+                $settings['level']
+            );
             $logger->pushHandler($handler);
 
             return $logger;
