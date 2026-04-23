@@ -2,3 +2,10 @@
 .env
 .docker-compose.local.yml
 .phpunit.result.cache
+
+# storage
+storage/*
+!storage/logs
+!storage/.gitkeep
+storage/logs/*
+!storage/logs/.gitkeep

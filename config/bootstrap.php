@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
+use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
 
 require __DIR__.'/../vendor/autoload.php';
@@ -39,10 +40,11 @@ $routes($app);
 $app->addRoutingMiddleware();
 
 // Add Error Middleware
-$app->addErrorMiddleware(
+$errorMiddleware = $app->addErrorMiddleware(
     $container->get('settings')['displayErrorDetails'],
     $container->get('settings')['logError'],
-    $container->get('settings')['logErrorDetails']
+    $container->get('settings')['logErrorDetails'],
+    $container->get(LoggerInterface::class)
 );
 
 return $app;

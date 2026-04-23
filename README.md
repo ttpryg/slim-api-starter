@@ -1,27 +1,29 @@
 # Slim 4 API Starter
 
-Starter project menggunakan Slim Framework 4 dengan PHP 8.2, PHP-DI, Eloquent ORM, dan Docker.
+A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent ORM, and Docker.
 
-## Struktur Folder
+## Folder Structure
 
 ```text
 .
-├── app/                # Source code aplikasi utama
+├── app/                # Main application source code
 │   ├── Action/         # API Actions (ADR Pattern)
 │   ├── Commands/       # CLI Commands (Symfony Console)
 │   ├── Model/          # Eloquent Models
-│   └── Traits/         # Reusable Traits (contoh: ResponseTrait)
-├── config/             # Konfigurasi (Routes, Container, Settings, DB)
+│   └── Traits/         # Reusable Traits (e.g., ResponseTrait)
+├── config/             # Configuration (Routes, Container, Settings, DB)
 ├── db/                 # Database Migrations & Seeds (Phinx)
 ├── public/             # Document root (Entry point index.php)
-├── tests/              # Pengujian otomatis (PHPUnit)
+├── storage/            # Local storage (Logs, Caches, etc.)
+│   └── logs/           # Application log files
+├── tests/              # Automated testing (PHPUnit)
 ├── slim                # Executable CLI tool (Symfony Console)
-├── Dockerfile          # Konfigurasi image PHP 8.2-FPM
+├── Dockerfile          # PHP 8.2-FPM image configuration
 ├── docker-compose.yml  # Orchestration App & Web Server (Nginx)
-└── nginx.conf          # Konfigurasi Nginx
+└── nginx.conf          # Nginx Configuration
 ```
 
-## Fitur & Teknologi Utama
+## Key Features & Technologies
 
 - **PHP 8.2**
 - **Slim Framework 4** & **Slim PSR-7**
@@ -29,70 +31,90 @@ Starter project menggunakan Slim Framework 4 dengan PHP 8.2, PHP-DI, Eloquent OR
 - **Eloquent ORM** (Database Management)
 - **Phinx** (Database Migrations)
 - **Symfony Console** (Custom CLI Generator)
+- **Monolog** (File-based Error Logging)
 - **Laravel Pint** (Code Styling & Formatting)
 - **PHPUnit** (Testing)
 - **Docker & Nginx**
 
-## Cara Menjalankan
+## How to Run
 
-1. **Clone/Download** project ini.
-2. Jalankan container dengan Docker Compose:
+1. **Clone/Download** this project.
+2. Start the container with Docker Compose:
    ```bash
    docker compose up -d --build
    ```
-3. Install dependencies menggunakan composer (di dalam container):
+3. Install dependencies using composer (inside the container):
    ```bash
    docker exec -it slim-api-starter-app-1 composer install
    ```
-4. Akses API di URL: `http://localhost:8080`
+4. Access the API at URL: `http://localhost:8080`
+
+## Application Logging
+
+This starter comes pre-configured with **Monolog** for error and debug logging.
+- Any unhandled exceptions or internal Slim errors will be automatically logged to:
+  `storage/logs/app.log`
+- You can inject `Psr\Log\LoggerInterface` into your actions to log custom messages manually:
+  ```php
+  public function __construct(private \Psr\Log\LoggerInterface $logger) {}
+  
+  public function __invoke(...) {
+      $this->logger->info("This is a custom log entry");
+  }
+  ```
 
 ## CLI Tool (Slim API Starter)
 
-Project ini memiliki built-in CLI (`./slim`) untuk membantu mempercepat proses development.
-Semua command CLI bisa dieksekusi di dalam container:
+This project has a built-in CLI (`./slim`) to help accelerate the development process.
+All CLI commands can be executed inside the container:
 
 ```bash
 docker exec -it slim-api-starter-app-1 php slim list
 ```
 
 ### Generator Commands
-- **Membuat Action Baru**: 
-  Akan men-generate class Action dengan format PascalCase dan otomatis menggunakan `ResponseTrait`.
+- **Make a New Action**: 
+  Generates an Action class in PascalCase format and automatically uses `ResponseTrait`.
   ```bash
   php slim make:action User/LoginAction
   ```
-- **Membuat Model Baru**:
-  Akan men-generate Eloquent Model dengan format yang sesuai.
+- **Make a New Model**:
+  Generates an Eloquent Model with the appropriate format.
   ```bash
   php slim make:model User
+  ```
+- **Make a New Migration**:
+  Generates a Phinx migration class.
+  ```bash
+  php slim make:migration CreateUsersTable
   ```
 
 ## Formatting & Code Styling
 
-Project ini terintegrasi dengan **Laravel Pint** untuk menjaga kerapian kode (PSR-12/Laravel Style).
+This project is integrated with **Laravel Pint** to maintain code neatness (PSR-12/Laravel Style).
 
-- **Mengecek Style Kode**: `composer style-check`
-- **Memperbaiki Style Kode Secara Otomatis**: `composer style-fix`
+- **Check Code Style**: `composer style-check`
+- **Fix Code Style Automatically**: `composer style-fix`
 
 ## Testing
 
-Semua file pengujian (tests) ditempatkan di direktori `tests/` dan dites menggunakan PHPUnit.
+All test files are placed in the `tests/` directory and tested using PHPUnit.
 
 ```bash
 docker exec -it slim-api-starter-app-1 composer test
 ```
 
-## Catatan Arsitektur
+## Architectural Notes
 
-### Pola ADR (Action-Domain-Response)
-Project ini menggunakan pola **ADR** sebagai alternatif dari MVC konvensional untuk endpoint API:
-- Setiap class di dalam `app/Action` bertindak secara independen dengan **Single Responsibility**.
-- Class diimplementasikan sebagai *invokable* (menggunakan magic method `__invoke()`) sehingga dapat di-routing secara dinamis oleh Slim.
-- Output distandarisasi menggunakan `ResponseTrait` yang memusatkan logika pembentukan JSON (metode `$this->success()` dan `$this->error()`).
+### ADR Pattern (Action-Domain-Response)
+This project uses the **ADR** pattern as an alternative to conventional MVC for API endpoints:
+- Each class in `app/Action` acts independently with **Single Responsibility**.
+- Classes are implemented as *invokables* (using the `__invoke()` magic method) so they can be routed dynamically by Slim.
+- Output is standardized using `ResponseTrait` which centralizes JSON payload creation (`$this->success()` and `$this->error()` methods).
 
-## Perintah Umum Container
+## Common Container Commands
 
-- **Melihat Log App**: `docker compose logs -f app`
-- **Masuk ke Container Shell**: `docker exec -it slim-api-starter-app-1 bash`
+- **View App Logs (Docker)**: `docker compose logs -f app`
+- **Enter Container Shell**: `docker exec -it slim-api-starter-app-1 bash`
 - **Update Composer**: `docker exec -it slim-api-starter-app-1 composer update`
 - **Refresh Autoloader**: `docker exec -it slim-api-starter-app-1 composer dump-autoload`
