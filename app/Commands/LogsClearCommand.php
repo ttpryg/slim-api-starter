@@ -40,7 +40,7 @@ class LogsClearCommand extends Command
         foreach ($files as $file) {
             if (unlink($file)) {
                 $deletedCount++;
-                $output->writeln("<comment>Deleted:</comment> " . basename($file));
+                $output->writeln('<comment>Deleted:</comment> '.basename($file));
             }
         }
 

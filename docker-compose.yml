@@ -1,14 +1,18 @@
 services:
   app:
     build: .
+    container_name: slim_app
+    working_dir: /var/www/html
     volumes:
       - .:/var/www/html
-      - /var/www/html/vendor # This prevents the host from overwriting the container's vendor folder
+      - /var/www/html/vendor # tetap boleh dipakai
+    user: "${UID}:${GID}" # 🔥 INI KUNCI UTAMA
     networks:
       - slim-network
 
   web:
     image: nginx:alpine
+    container_name: slim_web
     ports:
       - "8080:80"
     volumes:
