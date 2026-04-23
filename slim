@@ -5,6 +5,7 @@ require __DIR__.'/config/bootstrap.php';
 
 use App\Commands\MakeActionCommand;
 use App\Commands\MakeModelCommand;
+use App\Commands\MakeMigrationCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application('Slim API Starter', 'v1.0');
@@ -13,6 +14,7 @@ $application = new Application('Slim API Starter', 'v1.0');
 $application->addCommands([
     new MakeActionCommand,
     new MakeModelCommand,
+    new MakeMigrationCommand,
 ]);
 
 exit($application->run());
