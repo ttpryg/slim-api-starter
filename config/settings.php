@@ -1,12 +1,18 @@
 <?php
 
 declare(strict_types=1);
+use Monolog\Level;
 
 return [
     'settings' => [
         'displayErrorDetails' => (getenv('APP_ENV') === 'development' || filter_var(getenv('APP_DEBUG'), FILTER_VALIDATE_BOOLEAN)),
-        'logError' => false,
-        'logErrorDetails' => false,
+        'logError' => true,
+        'logErrorDetails' => true,
+        'logger' => [
+            'name' => 'slim-app',
+            'path' => __DIR__.'/../storage/logs/app.log',
+            'level' => Level::Debug,
+        ],
     ],
 
     'database' => [
