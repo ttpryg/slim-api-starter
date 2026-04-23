@@ -6,4 +6,4 @@ use Slim\App;
 /** @var App $app */
 $app = require __DIR__.'/../config/bootstrap.php';
 
-exit($app->run());
+$app->run();
