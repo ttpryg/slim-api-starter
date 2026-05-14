@@ -9,14 +9,11 @@ use Illuminate\Database\Schema\Builder;
 
 abstract class Migration
 {
-    protected Capsule $capsule;
-
     protected Builder $schema;
 
-    public function setCapsule(Capsule $capsule): void
+    public function __construct()
     {
-        $this->capsule = $capsule;
-        $this->schema = $capsule->schema();
+        $this->schema = Capsule::schema();
     }
 
     abstract public function up(): void;

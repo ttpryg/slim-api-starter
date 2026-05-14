@@ -9,14 +9,7 @@ use RuntimeException;
 
 class Migrator
 {
-    private Capsule $capsule;
-
     private string $table = 'migrations';
-
-    public function __construct(Capsule $capsule)
-    {
-        $this->capsule = $capsule;
-    }
 
     public function run(string $path): array
     {
@@ -36,7 +29,6 @@ class Migrator
 
         foreach ($pending as $file) {
             $migration = $this->resolve($path, $file);
-            $migration->setCapsule($this->capsule);
             $migration->up();
             $this->log($file, $batch);
             $results[] = $file;
@@ -49,34 +41,34 @@ class Migrator
     {
         $this->ensureRepository();
 
-        $migrations = $this->capsule->table($this->table)
-            ->where('batch', function ($query) {
-                $query->from($this->table)->selectRaw('MAX(batch)');
-            })
-            ->orderBy('migration', 'desc')
-            ->get();
+        $batches = Capsule::table($this->table)
+            ->select('batch')
+            ->distinct()
+            ->orderBy('batch', 'desc')
+            ->limit($steps)
+            ->pluck('batch');
 
-        if ($migrations->isEmpty()) {
+        if ($batches->isEmpty()) {
             return [];
         }
+
+        $migrations = Capsule::table($this->table)
+            ->whereIn('batch', $batches)
+            ->orderBy('batch', 'desc')
+            ->orderBy('migration', 'desc')
+            ->get();
 
         $results = [];
 
         foreach ($migrations as $m) {
-            if ($steps <= 0) {
-                break;
-            }
-
             $migration = $this->resolve($path, $m->migration);
-            $migration->setCapsule($this->capsule);
             $migration->down();
 
-            $this->capsule->table($this->table)
+            Capsule::table($this->table)
                 ->where('migration', $m->migration)
                 ->delete();
 
             $results[] = $m->migration;
-            $steps--;
         }
 
         return $results;
@@ -86,7 +78,7 @@ class Migrator
     {
         $this->ensureRepository();
 
-        $migrations = $this->capsule->table($this->table)
+        $migrations = Capsule::table($this->table)
             ->orderBy('batch', 'desc')
             ->orderBy('migration', 'desc')
             ->get();
@@ -99,10 +91,9 @@ class Migrator
 
         foreach ($migrations as $m) {
             $migration = $this->resolve($path, $m->migration);
-            $migration->setCapsule($this->capsule);
             $migration->down();
 
-            $this->capsule->table($this->table)
+            Capsule::table($this->table)
                 ->where('migration', $m->migration)
                 ->delete();
 
@@ -114,11 +105,11 @@ class Migrator
 
     private function ensureRepository(): void
     {
-        if ($this->capsule->schema()->hasTable($this->table)) {
+        if (Capsule::schema()->hasTable($this->table)) {
             return;
         }
 
-        $this->capsule->schema()->create($this->table, function ($table) {
+        Capsule::schema()->create($this->table, function ($table) {
             $table->id();
             $table->string('migration');
             $table->integer('batch');
@@ -128,7 +119,7 @@ class Migrator
 
     private function getRan(): array
     {
-        return $this->capsule->table($this->table)
+        return Capsule::table($this->table)
             ->orderBy('migration')
             ->pluck('migration')
             ->toArray();
@@ -166,7 +157,7 @@ class Migrator
 
     private function log(string $file, int $batch): void
     {
-        $this->capsule->table($this->table)->insert([
+        Capsule::table($this->table)->insert([
             'migration' => $file,
             'batch' => $batch,
         ]);
@@ -174,7 +165,7 @@ class Migrator
 
     private function getNextBatchNumber(): int
     {
-        $max = $this->capsule->table($this->table)->max('batch');
+        $max = Capsule::table($this->table)->max('batch');
 
         return ($max ?? 0) + 1;
     }

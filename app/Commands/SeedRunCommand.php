@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Commands;
 
 use App\Database\Seeder;
-use Illuminate\Container\Container;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,8 +36,6 @@ class SeedRunCommand extends Command
             return Command::SUCCESS;
         }
 
-        $capsule = $this->bootCapsule();
-
         foreach ($files as $file) {
             $filePath = $path.'/'.$file;
             $seeder = require $filePath;
@@ -50,24 +46,11 @@ class SeedRunCommand extends Command
                 continue;
             }
 
-            $seeder->setCapsule($capsule);
             $seeder->run();
 
             $output->writeln("<info>Seeded:</info> {$file}");
         }
 
         return Command::SUCCESS;
-    }
-
-    protected function bootCapsule(): Capsule
-    {
-        $settings = require __DIR__.'/../../config/settings.php';
-
-        $capsule = new Capsule(new Container);
-        $capsule->addConnection($settings['database']);
-        $capsule->bootEloquent();
-        $capsule->setAsGlobal();
-
-        return $capsule;
     }
 }

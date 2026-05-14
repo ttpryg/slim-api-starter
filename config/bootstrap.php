@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
+use Illuminate\Database\Capsule\Manager as Capsule;
 use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
 
@@ -27,6 +28,9 @@ $dependencies($containerBuilder);
 
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
+
+// Initialize Eloquent Capsule globally (for commands, models, and web app)
+$container->get(Capsule::class);
 
 // Instantiate the app
 AppFactory::setContainer($container);
