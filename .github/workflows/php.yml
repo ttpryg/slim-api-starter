@@ -48,8 +48,8 @@ jobs:
     - name: Check style code
       run: composer run style-check
 
-    - name: Run Phinx Migrations
-      run: ./vendor/bin/phinx
+    - name: Run Migrations
+      run: php slim migrate
 
     - name: Run PHPUnit Tests
       run: ./vendor/bin/phpunit

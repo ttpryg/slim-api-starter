@@ -12,7 +12,7 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 │   ├── Model/          # Eloquent Models
 │   └── Traits/         # Reusable Traits (e.g., ResponseTrait)
 ├── config/             # Configuration (Routes, Container, Settings, DB)
-├── db/                 # Database Migrations & Seeds (Phinx)
+├── db/                 # Database Migrations & Seeds
 ├── public/             # Document root (Entry point index.php)
 ├── storage/            # Local storage (Logs, Caches, etc.)
 │   └── logs/           # Application log files
@@ -29,7 +29,7 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 - **Slim Framework 4** & **Slim PSR-7**
 - **PHP-DI 7** (Dependency Injection)
 - **Eloquent ORM** (Database Management)
-- **Phinx** (Database Migrations)
+- **Illuminate Database** (Database Migrations & Schema Builder)
 - **Symfony Console** (Custom CLI Generator)
 - **Monolog** (File-based Error Logging)
 - **Laravel Pint** (Code Styling & Formatting)
@@ -83,10 +83,31 @@ docker exec -it slim_app php slim list
   ```bash
   php slim make:model User
   ```
+- **Run Migrations**:
+  Runs all pending database migrations.
+  ```bash
+  php slim migrate
+  ```
+- **Rollback Migrations**:
+  Rolls back the last batch of migrations.
+  ```bash
+  php slim migrate:rollback
+  php slim migrate:rollback 3   # rollback 3 batches
+  ```
 - **Make a New Migration**:
-  Generates a Phinx migration class.
+  Generates a new migration class using Illuminate Schema Builder.
   ```bash
   php slim make:migration CreateUsersTable
+  ```
+- **Run Seeders**:
+  Runs all database seeders.
+  ```bash
+  php slim seed:run
+  ```
+- **Create a Seeder**:
+  Generates a new database seeder class.
+  ```bash
+  php slim seed:create UsersTableSeeder
   ```
 
 ## Formatting & Code Styling

@@ -4,37 +4,70 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
-use Phinx\Console\PhinxApplication;
+use App\Database\Seeder;
+use Illuminate\Container\Container;
+use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'seed:run',
-    description: 'Run database seeder',
+    description: 'Run database seeders',
 )]
 class SeedRunCommand extends Command
 {
-    protected function configure(): void
-    {
-        $this->addArgument('name', InputArgument::REQUIRED, 'The name of the seeder (e.g., SampleClassSeeder)');
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $name = $input->getArgument('name');
+        $path = __DIR__.'/../../db/seeds';
 
-        $phinx = new PhinxApplication;
-        $phinx->setAutoExit(false); // Prevent Phinx from forcefully calling exit()
+        if (! is_dir($path)) {
+            $output->writeln('<error>Seeds directory not found.</error>');
 
-        $arguments = new ArrayInput([
-            'command' => 'seed:run',
-            'name' => $name,
-        ]);
+            return Command::FAILURE;
+        }
 
-        return $phinx->run($arguments, $output);
+        $files = scandir($path);
+        $files = array_diff($files, ['.', '..', '.gitkeep']);
+        sort($files);
+
+        if (empty($files)) {
+            $output->writeln('<info>No seeders found.</info>');
+
+            return Command::SUCCESS;
+        }
+
+        $capsule = $this->bootCapsule();
+
+        foreach ($files as $file) {
+            $filePath = $path.'/'.$file;
+            $seeder = require $filePath;
+
+            if (! $seeder instanceof Seeder) {
+                $output->writeln("<error>Skipped (invalid): {$file}</error>");
+
+                continue;
+            }
+
+            $seeder->setCapsule($capsule);
+            $seeder->run();
+
+            $output->writeln("<info>Seeded:</info> {$file}");
+        }
+
+        return Command::SUCCESS;
+    }
+
+    protected function bootCapsule(): Capsule
+    {
+        $settings = require __DIR__.'/../../config/settings.php';
+
+        $capsule = new Capsule(new Container);
+        $capsule->addConnection($settings['database']);
+        $capsule->bootEloquent();
+        $capsule->setAsGlobal();
+
+        return $capsule;
     }
 }
