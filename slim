@@ -7,6 +7,8 @@ use App\Commands\LogsClearCommand;
 use App\Commands\MakeActionCommand;
 use App\Commands\MakeMigrationCommand;
 use App\Commands\MakeModelCommand;
+use App\Commands\MigrateCommand;
+use App\Commands\MigrationRollbackCommand;
 use App\Commands\SeedCreateCommand;
 use App\Commands\SeedRunCommand;
 use Symfony\Component\Console\Application;
@@ -19,6 +21,8 @@ $application->addCommands([
     new MakeActionCommand,
     new MakeModelCommand,
     new MakeMigrationCommand,
+    new MigrateCommand,
+    new MigrationRollbackCommand,
     new SeedCreateCommand,
     new SeedRunCommand,
 ]);

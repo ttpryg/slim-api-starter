@@ -8,7 +8,6 @@
         "illuminate/events": "^11.0",
         "monolog/monolog": "^3.10",
         "php-di/php-di": "^7.0",
-        "robmorgan/phinx": "^0.16.11",
         "slim/psr7": "^1.6",
         "slim/slim": "^4.12",
         "symfony/console": "^7.4",
