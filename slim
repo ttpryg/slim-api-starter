@@ -1,12 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__.'/vendor/autoload.php';
-
-$settings = require __DIR__.'/config/settings.php';
-$appSettings = $settings['settings'];
-
-require __DIR__.'/config/bootstrap.php';
+$app = require __DIR__.'/config/bootstrap.php';
+$appSettings = $app->getContainer()->get('settings');
 
 use App\Commands\LogsClearCommand;
 use App\Commands\MakeActionCommand;
