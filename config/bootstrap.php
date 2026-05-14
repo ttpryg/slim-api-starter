@@ -7,9 +7,7 @@ use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpMethodNotAllowedException;
-use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpException;
 use Slim\Factory\AppFactory;
 
 require __DIR__.'/../vendor/autoload.php';
@@ -65,12 +63,8 @@ $errorMiddleware->setDefaultErrorHandler(function (
     $response = $app->getResponseFactory()->createResponse();
 
     $status = 500;
-    if ($exception instanceof HttpNotFoundException) {
-        $status = 404;
-    } elseif ($exception instanceof HttpMethodNotAllowedException) {
-        $status = 405;
-    } elseif ($exception instanceof HttpBadRequestException) {
-        $status = 400;
+    if ($exception instanceof HttpException) {
+        $status = $exception->getCode();
     }
 
     $payload = [
@@ -87,7 +81,7 @@ $errorMiddleware->setDefaultErrorHandler(function (
     }
 
     $response->getBody()->write(
-        json_encode($payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES)
+        json_encode($payload, JSON_UNESCAPED_SLASHES)
     );
 
     return $response
