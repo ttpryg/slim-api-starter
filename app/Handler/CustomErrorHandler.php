@@ -6,6 +6,7 @@ namespace App\Handler;
 
 use App\Traits\ResponseTrait;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Exception\HttpException;
 use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Handlers\ErrorHandler;
 
@@ -16,7 +17,10 @@ final class CustomErrorHandler extends ErrorHandler
     protected function respond(): ResponseInterface
     {
         $statusCode = $this->statusCode;
-        $message = $this->exception->getMessage() ?: 'Internal Server Error';
+
+        $message = $this->exception instanceof HttpException || $this->displayErrorDetails
+            ? ($this->exception->getMessage() ?: 'Internal Server Error')
+            : 'Internal Server Error';
 
         $response = $this->responseFactory->createResponse($statusCode);
 
