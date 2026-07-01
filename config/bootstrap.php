@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Middleware\CorsMiddleware;
+use App\Middleware\RateLimitMiddleware;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -37,6 +39,10 @@ $container->get(Capsule::class);
 // Instantiate the app
 AppFactory::setContainer($container);
 $app = AppFactory::create();
+
+// Register middleware
+$app->add(new RateLimitMiddleware($container->get('rate_limit')));
+$app->add(new CorsMiddleware($container->get('cors')));
 
 // Register routes
 $routes = require __DIR__.'/../config/routes.php';

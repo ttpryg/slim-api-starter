@@ -1,10 +1,15 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm
 
-# Install essential tools
-RUN apk add --no-cache bash git unzip zip
+# Gunakan Debian apt-get (lebih stabil & cepat dari Alpine untuk kompilasi C++)
+RUN apt-get update && apt-get install -y \
+    bash \
+    git \
+    unzip \
+    zip \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions instantly using mlocati's installer
-COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
+# Install PHP extensions menggunakan mlocati
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
     intl \
     opcache \

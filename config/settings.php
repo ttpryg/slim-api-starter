@@ -18,6 +18,29 @@ return [
         ],
     ],
 
+    'cors' => [
+        'allowed_origins' => explode(',', (getenv('CORS_ALLOWED_ORIGINS') ?: '*')),
+        'allowed_methods' => explode(',', (getenv('CORS_ALLOWED_METHODS') ?: 'GET,POST,PUT,PATCH,DELETE,OPTIONS')),
+        'allowed_headers' => explode(',', (getenv('CORS_ALLOWED_HEADERS') ?: 'Content-Type,Authorization,X-Requested-With')),
+        'exposed_headers' => explode(',', (getenv('CORS_EXPOSED_HEADERS') ?: '')),
+        'max_age' => (int) (getenv('CORS_MAX_AGE') ?: 86400),
+        'allow_credentials' => filter_var(getenv('CORS_ALLOW_CREDENTIALS'), FILTER_VALIDATE_BOOLEAN) ?: false,
+    ],
+
+    'jwt' => [
+        'secret' => getenv('JWT_SECRET') ?: 'your-secret-key-change-in-production',
+        'algorithm' => getenv('JWT_ALGORITHM') ?: 'HS256',
+        'ttl' => (int) (getenv('JWT_TTL') ?: 3600),
+        'refresh_ttl' => (int) (getenv('JWT_REFRESH_TTL') ?: 1209600),
+        'issuer' => getenv('JWT_ISSUER') ?: 'slim-api-starter',
+    ],
+
+    'rate_limit' => [
+        'max_requests' => (int) (getenv('RATE_LIMIT_MAX') ?: 60),
+        'window' => (int) (getenv('RATE_LIMIT_WINDOW') ?: 60),
+        'storage_path' => __DIR__.'/../storage/rate-limit',
+    ],
+
     'database' => [
         'driver' => getenv('DB_DRIVER') ?: 'mysql',
         'host' => getenv('DB_HOST') ?: 'localhost',

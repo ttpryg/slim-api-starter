@@ -46,7 +46,7 @@ jobs:
       run: cp .env.example .env
 
     - name: Check style code
-      run: composer run style-check
+      run: composer run fix:check
 
     # - name: Run Migrations
     #   run: php slim migrate
