@@ -1,18 +1,11 @@
 FROM php:8.2-fpm-alpine
 
-# Install system dependencies
-RUN apk add --no-cache \
-    bash \
-    git \
-    icu-dev \
-    libxml2-dev \
-    libzip-dev \
-    oniguruma-dev \
-    unzip \
-    zip
+# Install essential tools
+RUN apk add --no-cache bash git unzip zip
 
-# Install PHP extensions
-RUN docker-php-ext-install \
+# Install PHP extensions instantly using mlocati's installer
+COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions \
     intl \
     opcache \
     pdo_mysql \
