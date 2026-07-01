@@ -24,8 +24,9 @@ final class JwtAuthMiddleware implements MiddlewareInterface
     {
         $authHeader = $request->getHeaderLine('Authorization');
 
-        if (empty($authHeader) || !str_starts_with($authHeader, 'Bearer ')) {
-            $response = new \Slim\Psr7\Response();
+        if (empty($authHeader) || strncasecmp($authHeader, 'Bearer ', 7) !== 0) {
+            $response = new \Slim\Psr7\Response;
+
             return $this->error($response, 'Missing or malformed Authorization header', 401);
         }
 
@@ -35,7 +36,8 @@ final class JwtAuthMiddleware implements MiddlewareInterface
             $decoded = JWT::decode($token, new Key($this->settings['secret'], $this->settings['algorithm']));
             $request = $request->withAttribute('jwt_payload', (array) $decoded);
         } catch (\Throwable $e) {
-            $response = new \Slim\Psr7\Response();
+            $response = new \Slim\Psr7\Response;
+
             return $this->error($response, 'Invalid or expired token', 401);
         }
 

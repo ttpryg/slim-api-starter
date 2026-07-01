@@ -18,29 +18,38 @@ final class CorsMiddleware implements MiddlewareInterface
     public function process(Request $request, RequestHandler $handler): Response
     {
         if ($request->getMethod() === 'OPTIONS') {
-            $response = new \Slim\Psr7\Response();
-            return $this->addCorsHeaders($response);
+            $response = new \Slim\Psr7\Response;
+
+            return $this->addCorsHeaders($request, $response);
         }
 
         $response = $handler->handle($request);
-        return $this->addCorsHeaders($response);
+
+        return $this->addCorsHeaders($request, $response);
     }
 
-    private function addCorsHeaders(Response $response): Response
+    private function addCorsHeaders(Request $request, Response $response): Response
     {
-        $origin = $this->settings['allowed_origins'];
+        $requestOrigin = $request->getHeaderLine('Origin');
+        $allowedOrigins = $this->settings['allowed_origins'];
+        $allowCredentials = $this->settings['allow_credentials'];
 
-        if (in_array('*', $origin, true)) {
-            $response = $response->withHeader('Access-Control-Allow-Origin', '*');
-        } else {
-            $response = $response->withHeader('Access-Control-Allow-Origin', implode(', ', $origin));
+        if (in_array('*', $allowedOrigins, true)) {
+            if ($allowCredentials) {
+                $response = $response->withHeader('Access-Control-Allow-Origin', $requestOrigin ?: '*');
+            } else {
+                $response = $response->withHeader('Access-Control-Allow-Origin', '*');
+            }
+        } elseif (in_array($requestOrigin, $allowedOrigins, true)) {
+            $response = $response->withHeader('Access-Control-Allow-Origin', $requestOrigin);
+            $response = $response->withHeader('Vary', 'Origin');
         }
 
         $response = $response
             ->withHeader('Access-Control-Allow-Methods', implode(', ', $this->settings['allowed_methods']))
             ->withHeader('Access-Control-Allow-Headers', implode(', ', $this->settings['allowed_headers']));
 
-        if (!empty($this->settings['exposed_headers'])) {
+        if (! empty($this->settings['exposed_headers'])) {
             $response = $response->withHeader('Access-Control-Expose-Headers', implode(', ', $this->settings['exposed_headers']));
         }
 
@@ -48,7 +57,7 @@ final class CorsMiddleware implements MiddlewareInterface
             $response = $response->withHeader('Access-Control-Max-Age', (string) $this->settings['max_age']);
         }
 
-        if ($this->settings['allow_credentials']) {
+        if ($allowCredentials) {
             $response = $response->withHeader('Access-Control-Allow-Credentials', 'true');
         }
 

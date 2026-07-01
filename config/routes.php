@@ -19,6 +19,7 @@ return function (App $app) {
                 'message' => 'Authenticated',
                 'data' => $payload,
             ]));
+
             return $response->withHeader('Content-Type', 'application/json');
         });
     })->add(new JwtAuthMiddleware($app->getContainer()->get('jwt')));

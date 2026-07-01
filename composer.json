@@ -35,7 +35,7 @@
     },
     "scripts": {
         "test": "phpunit",
-        "style-check": "pint --test --verbose --quiet ",
-        "style-fix": "pint --quiet"
+        "fix:check": "pint --test --verbose --no-interaction",
+        "fix": "pint"
     }
 }
