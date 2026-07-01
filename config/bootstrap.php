@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Handler\CustomErrorHandler;
 use App\Middleware\CorsMiddleware;
 use App\Middleware\RateLimitMiddleware;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Exception\HttpException;
 use Slim\Factory\AppFactory;
 
 require __DIR__.'/../vendor/autoload.php';
@@ -59,40 +58,12 @@ $errorMiddleware = $app->addErrorMiddleware(
     $container->get(LoggerInterface::class)
 );
 
-$errorMiddleware->setDefaultErrorHandler(function (
-    ServerRequestInterface $request,
-    Throwable $exception,
-    bool $displayErrorDetails,
-    bool $logErrors,
-    bool $logErrorDetails
-) use ($app) {
-    $response = $app->getResponseFactory()->createResponse();
-
-    $status = 500;
-    if ($exception instanceof HttpException) {
-        $status = $exception->getCode();
-    }
-
-    $payload = [
-        'success' => false,
-        'message' => $exception->getMessage() ?: 'Internal Server Error',
-    ];
-
-    if ($displayErrorDetails) {
-        $payload['errors'] = [
-            'file' => $exception->getFile(),
-            'line' => $exception->getLine(),
-            'trace' => explode("\n", $exception->getTraceAsString()),
-        ];
-    }
-
-    $response->getBody()->write(
-        json_encode($payload, JSON_UNESCAPED_SLASHES)
-    );
-
-    return $response
-        ->withHeader('Content-Type', 'application/json')
-        ->withStatus($status);
-});
+$errorMiddleware->setDefaultErrorHandler(
+    new CustomErrorHandler(
+        $app->getCallableResolver(),
+        $app->getResponseFactory(),
+        $container->get(LoggerInterface::class)
+    )
+);
 
 return $app;
