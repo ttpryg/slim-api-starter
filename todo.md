@@ -3,9 +3,9 @@
 Meskipun *starter* ini sudah sangat solid, masih ada beberapa fitur krusial yang umumnya dibutuhkan oleh aplikasi API modern berbasis *production*. Berikut adalah daftar rekomendasi peningkatannya:
 
 ## 1. Security & Authentication
-- [ ] **CORS Middleware**: Tambahkan middleware CORS standar. API hampir selalu dikonsumsi oleh client eksternal (React/Vue/Flutter), sehingga penanganan *Cross-Origin* sangat penting.
-- [ ] **JWT Authentication**: Integrasikan library JWT (JSON Web Token) sebagai middleware untuk memproteksi endpoint/routes tertentu.
-- [ ] **Rate Limiting (Throttling)**: Implementasikan pembatasan jumlah *request* (misal: 60 request/menit) per IP untuk melindungi API dari serangan *brute-force* atau *spam*.
+- [x] **CORS Middleware**: Tambahkan middleware CORS standar. API hampir selalu dikonsumsi oleh client eksternal (React/Vue/Flutter), sehingga penanganan *Cross-Origin* sangat penting.
+- [x] **JWT Authentication**: Integrasikan library JWT (JSON Web Token) sebagai middleware untuk memproteksi endpoint/routes tertentu.
+- [x] **Rate Limiting (Throttling)**: Implementasikan pembatasan jumlah *request* (misal: 60 request/menit) per IP untuk melindungi API dari serangan *brute-force* atau *spam*.
 
 ## 2. Data Handling & Validation
 - [ ] **Request Validation**: Integrasikan library validasi (seperti `rakit/validation` atau `respect/validation`). Saat ini belum ada cara standar untuk memvalidasi input *payload* JSON sebelum diproses oleh Action.
