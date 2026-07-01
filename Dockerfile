@@ -4,7 +4,7 @@ FROM php:8.2-fpm-alpine
 RUN apk add --no-cache bash git unzip zip
 
 # Install PHP extensions instantly using mlocati's installer
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
     intl \
     opcache \
