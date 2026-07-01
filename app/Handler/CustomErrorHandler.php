@@ -15,6 +15,15 @@ final class CustomErrorHandler extends ErrorHandler
 {
     use ResponseTrait;
 
+    protected function writeToErrorLog(): void
+    {
+        if ($this->exception instanceof ValidationException) {
+            return;
+        }
+
+        parent::writeToErrorLog();
+    }
+
     protected function respond(): ResponseInterface
     {
         $statusCode = $this->statusCode;

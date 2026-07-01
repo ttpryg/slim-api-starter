@@ -6,6 +6,8 @@ use DI\ContainerBuilder;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
+use League\Fractal\Manager;
+use League\Fractal\Serializer\ArraySerializer;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
@@ -30,6 +32,13 @@ return function (ContainerBuilder $containerBuilder) {
             $logger->pushHandler($handler);
 
             return $logger;
+        },
+
+        Manager::class => function () {
+            $manager = new Manager;
+            $manager->setSerializer(new ArraySerializer);
+
+            return $manager;
         },
 
         Capsule::class => function (ContainerInterface $c) {

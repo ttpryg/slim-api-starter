@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 use App\Action\HomeAction;
+use App\Action\UserListAction;
 use App\Middleware\JwtAuthMiddleware;
-use App\Transformer\Transformer;
-use App\Traits\TransformTrait;
 use App\Validation\Validator;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
@@ -35,29 +34,7 @@ return function (App $app) {
     });
 
     // Example: Resource Transformers & Pagination
-    $app->get('/users', function ($request, $response) {
-        $transformTrait = new class {
-            use TransformTrait;
-        };
-
-        $users = [
-            ['id' => 1, 'name' => 'Alice', 'email' => 'alice@example.com'],
-            ['id' => 2, 'name' => 'Bob', 'email' => 'bob@example.com'],
-        ];
-
-        $transformer = new class extends Transformer {
-            public function transform(array $user): array
-            {
-                return [
-                    'id' => $user['id'],
-                    'name' => $user['name'],
-                    'email' => $user['email'],
-                ];
-            }
-        };
-
-        return $transformTrait->collection($response, $users, $transformer, 'users');
-    });
+    $app->get('/users', UserListAction::class);
 
     // Protected API routes (require JWT token)
     $app->group('/api', function (RouteCollectorProxy $group) {

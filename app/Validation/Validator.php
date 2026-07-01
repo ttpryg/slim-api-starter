@@ -11,9 +11,9 @@ final class Validator
 {
     private RakitValidator $validator;
 
-    public function __construct()
+    public function __construct(?RakitValidator $validator = null)
     {
-        $this->validator = new RakitValidator;
+        $this->validator = $validator ?? new RakitValidator;
     }
 
     public function validate(array $data, array $rules, array $messages = []): array
