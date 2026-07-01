@@ -38,6 +38,10 @@ $container->get(Capsule::class);
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
+// Register middleware
+$app->add(new App\Middleware\CorsMiddleware($container->get('cors')));
+$app->add(new App\Middleware\RateLimitMiddleware($container->get('rate_limit')));
+
 // Register routes
 $routes = require __DIR__.'/../config/routes.php';
 $routes($app);
