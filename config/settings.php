@@ -6,7 +6,7 @@ use Monolog\Level;
 return [
     'settings' => [
         'app_name' => 'Slim API Starter',
-        'app_version' => 'v0.0.2',
+        'app_version' => 'v0.0.3',
         'displayErrorDetails' => (getenv('APP_ENV') === 'development' || filter_var(getenv('APP_DEBUG'), FILTER_VALIDATE_BOOLEAN)),
         'logError' => true,
         'logErrorDetails' => true,
