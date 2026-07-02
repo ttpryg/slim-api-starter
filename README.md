@@ -7,15 +7,22 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 ```text
 .
 ├── app/                # Main application source code
-│   ├── Action/         # API Actions (ADR Pattern)
+│   ├── Action/         # API Actions (ADR Pattern — invokable classes)
 │   ├── Commands/       # CLI Commands (Symfony Console)
+│   ├── Database/       # Migration & Seeder infrastructure
+│   ├── Exception/      # Custom exception classes
+│   ├── Handler/        # Custom error handler (JSON error responses)
+│   ├── Middleware/      # PSR-15 Middleware (CORS, JWT, Rate Limit)
 │   ├── Model/          # Eloquent Models
-│   └── Traits/         # Reusable Traits (e.g., ResponseTrait)
+│   ├── Traits/         # Reusable Traits (ResponseTrait, TransformTrait)
+│   ├── Transformer/    # Fractal resource transformers
+│   └── Validation/     # Request validation wrapper (Rakit)
 ├── config/             # Configuration (Routes, Container, Settings, DB)
 ├── db/                 # Database Migrations & Seeds
 ├── public/             # Document root (Entry point index.php)
 ├── storage/            # Local storage (Logs, Caches, etc.)
-│   └── logs/           # Application log files
+│   ├── logs/           # Rotating application log files
+│   └── rate-limit/     # Rate limiter cache files
 ├── tests/              # Automated testing (PHPUnit)
 ├── slim                # Executable CLI tool (Symfony Console)
 ├── Dockerfile          # PHP 8.2-FPM image configuration
@@ -35,6 +42,7 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 - **Laravel Pint** (Code Styling & Formatting)
 - **PHPUnit** (Testing)
 - **Docker & Nginx**
+- **Health Check Endpoint** (`GET /health`) — Database ping & storage writability check
 
 ## How to Run
 
@@ -51,9 +59,9 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 
 ## Application Logging
 
-This starter comes pre-configured with **Monolog** for error and debug logging.
+This starter comes pre-configured with **Monolog** (`RotatingFileHandler`) for error and debug logging.
 - Any unhandled exceptions or internal Slim errors will be automatically logged to:
-  `storage/logs/app.log`
+  `storage/logs/app-YYYY-MM-DD.log` (rotated daily, max 14 files retained)
 - You can inject `Psr\Log\LoggerInterface` into your actions to log custom messages manually:
   ```php
   public function __construct(private \Psr\Log\LoggerInterface $logger) {}
