@@ -6,7 +6,6 @@ services:
     volumes:
       - .:/var/www/html
       - /var/www/html/vendor # tetap boleh dipakai
-    user: "${UID}:${GID}" # 🔥 INI KUNCI UTAMA
     networks:
       - slim-network
 
