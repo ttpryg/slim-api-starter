@@ -8,8 +8,8 @@ Meskipun *starter* ini sudah sangat solid, masih ada beberapa fitur krusial yang
 - [x] **Rate Limiting (Throttling)**: Implementasikan pembatasan jumlah *request* (misal: 60 request/menit) per IP untuk melindungi API dari serangan *brute-force* atau *spam*.
 
 ## 2. Data Handling & Validation
-- [ ] **Request Validation**: Integrasikan library validasi (seperti `rakit/validation` atau `respect/validation`). Saat ini belum ada cara standar untuk memvalidasi input *payload* JSON sebelum diproses oleh Action.
-- [ ] **Resource Transformers / Pagination**: Gunakan *layer transformer* (seperti `league/fractal`) untuk melakukan serialisasi data dari Eloquent Model ke JSON yang terstruktur dan aman, serta menangani meta data *pagination*.
+- [x] **Request Validation**: Integrasikan library validasi (seperti `rakit/validation` atau `respect/validation`). Saat ini belum ada cara standar untuk memvalidasi input *payload* JSON sebelum diproses oleh Action.
+- [x] **Resource Transformers / Pagination**: Gunakan *layer transformer* (seperti `league/fractal`) untuk melakukan serialisasi data dari Eloquent Model ke JSON yang terstruktur dan aman, serta menangani meta data *pagination*.
 
 ## 3. Error & Exception Handling
 - [x] **Custom Error Handler**: *Override* `ErrorHandler` bawaan Slim. Saat ini, error 404 (Not Found) atau 500 (Internal Server Error) masih menampilkan HTML/teks default dari Slim. Handler khusus perlu dibuat agar semua error sistem konsisten menggunakan format JSON dari `ResponseTrait` (`{"success": false, "message": "..."}`).

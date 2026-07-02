@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler;
 
+use App\Exception\ValidationException;
 use App\Traits\ResponseTrait;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpException;
@@ -14,9 +15,24 @@ final class CustomErrorHandler extends ErrorHandler
 {
     use ResponseTrait;
 
+    protected function writeToErrorLog(): void
+    {
+        if ($this->exception instanceof ValidationException) {
+            return;
+        }
+
+        parent::writeToErrorLog();
+    }
+
     protected function respond(): ResponseInterface
     {
         $statusCode = $this->statusCode;
+
+        if ($this->exception instanceof ValidationException) {
+            $response = $this->responseFactory->createResponse(422);
+
+            return $this->error($response, $this->exception->getMessage(), 422, $this->exception->getErrors());
+        }
 
         $message = $this->exception instanceof HttpException || $this->displayErrorDetails
             ? ($this->exception->getMessage() ?: 'Internal Server Error')
