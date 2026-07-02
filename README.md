@@ -61,7 +61,7 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 
 This starter comes pre-configured with **Monolog** (`RotatingFileHandler`) for error and debug logging.
 - Any unhandled exceptions or internal Slim errors will be automatically logged to:
-  `storage/logs/app-YYYY-MM-DD` (rotated daily, max 14 files retained)
+  `storage/logs/app-YYYY-MM-DD.log` (rotated daily, max 14 files retained)
 - You can inject `Psr\Log\LoggerInterface` into your actions to log custom messages manually:
   ```php
   public function __construct(private \Psr\Log\LoggerInterface $logger) {}
