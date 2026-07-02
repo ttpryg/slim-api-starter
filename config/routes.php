@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Action\HealthAction;
 use App\Action\HomeAction;
 use App\Action\UserListAction;
 use App\Middleware\JwtAuthMiddleware;
@@ -35,6 +36,9 @@ return function (App $app) {
 
     // Example: Resource Transformers & Pagination
     $app->get('/users', UserListAction::class);
+
+    // Health check endpoint (public, no authentication required)
+    $app->get('/health', HealthAction::class);
 
     // Protected API routes (require JWT token)
     $app->group('/api', function (RouteCollectorProxy $group) {
