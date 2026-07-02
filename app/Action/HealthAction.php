@@ -6,7 +6,6 @@ namespace App\Action;
 
 use App\Traits\ResponseTrait;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use PDOException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -15,8 +14,8 @@ final class HealthAction
     use ResponseTrait;
 
     private const STORAGE_DIRS = [
-        'logs' => __DIR__ . '/../../storage/logs',
-        'rate-limit' => __DIR__ . '/../../storage/rate-limit',
+        'logs' => __DIR__.'/../../storage/logs',
+        'rate-limit' => __DIR__.'/../../storage/rate-limit',
     ];
 
     public function __invoke(Request $request, Response $response): Response
@@ -49,8 +48,9 @@ final class HealthAction
     {
         try {
             Capsule::connection()->select('SELECT 1');
+
             return 'ok';
-        } catch (PDOException) {
+        } catch (\Throwable) {
             return 'unreachable';
         }
     }
@@ -58,7 +58,7 @@ final class HealthAction
     private function checkStorage(): string
     {
         foreach (self::STORAGE_DIRS as $name => $path) {
-            if (!is_dir($path) || !is_writable($path)) {
+            if (! is_dir($path) || ! is_writable($path)) {
                 return 'unreachable';
             }
         }
