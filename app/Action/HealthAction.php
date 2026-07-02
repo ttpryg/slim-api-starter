@@ -8,10 +8,15 @@ use App\Traits\ResponseTrait;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
 
 final class HealthAction
 {
     use ResponseTrait;
+
+    public function __construct(
+        private readonly LoggerInterface $logger,
+    ) {}
 
     private const STORAGE_DIRS = [
         'logs' => __DIR__.'/../../storage/logs',
@@ -50,7 +55,11 @@ final class HealthAction
             Capsule::connection()->select('SELECT 1');
 
             return 'ok';
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            $this->logger->error('Health check: database unreachable', [
+                'error' => $e->getMessage(),
+            ]);
+
             return 'unreachable';
         }
     }
