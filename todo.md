@@ -22,7 +22,7 @@ Meskipun *starter* ini sudah sangat solid, masih ada beberapa fitur krusial yang
 - [ ] **Swagger/OpenAPI**: Integrasikan library seperti `zircote/swagger-php` agar dokumentasi API bisa di-generate secara otomatis berdasarkan *attributes/annotations* di class Action.
 
 ## 6. Architecture & Monitoring
-- [ ] **Health Check Endpoint**: Tambahkan endpoint publik (misal: `/health` atau `/ping`) yang tidak diproteksi, bertugas untuk melakukan *ping* ke database dan memastikan semua servis internal berjalan dengan baik.
+- [x] **Health Check Endpoint**: Tambahkan endpoint publik (misal: `/health` atau `/ping`) yang tidak diproteksi, bertugas untuk melakukan *ping* ke database dan memastikan semua servis internal berjalan dengan baik.
 
 ## 7. Additional Enhancements (Dari Review Lanjutan)
 - [x] **Log Rotation**: Mengganti `StreamHandler` menjadi `RotatingFileHandler` agar file log (`storage/logs/app.log`) dibatasi dan dirotasi berdasarkan tanggal untuk mencegah pembengkakan memori. (Selesai diterapkan!)
