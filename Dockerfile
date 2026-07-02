@@ -33,10 +33,10 @@ RUN composer install \
 # Copy seluruh source code
 COPY . .
 
-# Fix permission hanya untuk folder yang butuh write
-RUN mkdir -p storage/logs \
-    && chown -R www-data:www-data storage \
-    && chmod -R 775 storage
+# Fix permission untuk folder yang butuh write.
+# Mode 777 karena runtime user tidak diketahui (bisa www-data atau host user via UID:GID)
+RUN mkdir -p storage/logs storage/rate-limit \
+    && chmod -R 777 storage
 
 # Gunakan user non-root (lebih aman)
 USER www-data
