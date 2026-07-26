@@ -4,6 +4,7 @@
 $app = require __DIR__.'/config/bootstrap.php';
 $appSettings = $app->getContainer()->get('settings');
 
+use App\Commands\DbWipeCommand;
 use App\Commands\KeyGenerateCommand;
 use App\Commands\LogsClearCommand;
 use App\Commands\MakeActionCommand;
@@ -19,6 +20,7 @@ $application = new Application($appSettings['app_name'], $appSettings['app_versi
 
 // register commands
 $application->addCommands([
+    new DbWipeCommand,
     new KeyGenerateCommand,
     new LogsClearCommand,
     new MakeActionCommand,
