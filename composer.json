@@ -7,6 +7,7 @@
         "firebase/php-jwt": "^7.1",
         "illuminate/database": "^11.0",
         "illuminate/events": "^11.0",
+        "illuminate/pagination": "^11.51",
         "league/fractal": "^0.21.0",
         "monolog/monolog": "^3.10",
         "php-di/php-di": "^7.0",
