@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
 # Gunakan Debian apt-get (lebih stabil & cepat dari Alpine untuk kompilasi C++)
 RUN apt-get update && apt-get install -y \
