@@ -8,7 +8,7 @@ Meskipun *starter* ini sudah sangat solid, masih ada beberapa fitur krusial yang
 - [x] **Rate Limiting (Throttling)**: Implementasikan pembatasan jumlah *request* (misal: 60 request/menit) per IP untuk melindungi API dari serangan *brute-force* atau *spam*.
 
 ## 2. Data Handling & Validation
-- [x] **Request Validation**: Integrasikan library validasi (seperti `rakit/validation` atau `respect/validation`). Saat ini belum ada cara standar untuk memvalidasi input *payload* JSON sebelum diproses oleh Action.
+- [x] **Request Validation**: Integrasikan library validasi (`symfony/validator`). Menggunakan `App\Validation\Validator` untuk memvalidasi input *payload* JSON maupun objek DTO sebelum diproses oleh Action.
 - [x] **Resource Transformers / Pagination**: Gunakan *layer transformer* (seperti `league/fractal`) untuk melakukan serialisasi data dari Eloquent Model ke JSON yang terstruktur dan aman, serta menangani meta data *pagination*.
 
 ## 3. Error & Exception Handling
