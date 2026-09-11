@@ -1,6 +1,6 @@
 # Slim 4 API Starter
 
-A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent ORM, and Docker.
+A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent ORM, Symfony Validator, Rector, and Docker.
 
 ## Folder Structure
 
@@ -12,11 +12,11 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 │   ├── Database/       # Migration & Seeder infrastructure
 │   ├── Exception/      # Custom exception classes
 │   ├── Handler/        # Custom error handler (JSON error responses)
-│   ├── Middleware/      # PSR-15 Middleware (CORS, JWT, Rate Limit)
+│   ├── Middleware/     # PSR-15 Middleware (CORS, JWT, Rate Limit)
 │   ├── Model/          # Eloquent Models
 │   ├── Traits/         # Reusable Traits (ResponseTrait, TransformTrait)
 │   ├── Transformer/    # Fractal resource transformers
-│   └── Validation/     # Request validation wrapper (Rakit)
+│   └── Validation/     # Request validation wrapper (Symfony Validator)
 ├── config/             # Configuration (Routes, Container, Settings, DB)
 ├── db/                 # Database Migrations & Seeds
 ├── public/             # Document root (Entry point index.php)
@@ -24,6 +24,7 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 │   ├── logs/           # Rotating application log files
 │   └── rate-limit/     # Rate limiter cache files
 ├── tests/              # Automated testing (PHPUnit)
+├── rector.php          # Rector 2 configuration
 ├── slim                # Executable CLI tool (Symfony Console)
 ├── Dockerfile          # PHP 8.2-FPM image configuration
 ├── docker-compose.yml  # Orchestration App & Web Server (Nginx)
@@ -37,8 +38,10 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 - **PHP-DI 7** (Dependency Injection)
 - **Eloquent ORM** (Database Management)
 - **Illuminate Database** (Database Migrations & Schema Builder)
+- **Symfony Validator** (Request Validation & DTO Validation)
 - **Symfony Console** (Custom CLI Generator)
-- **Monolog** (File-based Error Logging)
+- **Monolog** (Rotating File-based Error Logging)
+- **Rector 2** (Automated Code Refactoring & Quality Checks)
 - **Laravel Pint** (Code Styling & Formatting)
 - **PHPUnit** (Testing)
 - **Docker & Nginx**
@@ -56,6 +59,42 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
    docker exec -it slim_app composer install
    ```
 4. Access the API at URL: `http://localhost:8080`
+
+## Request Validation
+
+This starter features `App\Validation\Validator` built on top of **Symfony Validator**. It supports three flexible validation styles:
+
+1. **Array String Rules** (Laravel-style string rules for convenience):
+   ```php
+   $validated = $validator->validate((array) $request->getParsedBody(), [
+       'name' => 'required|min:3|max:255',
+       'email' => 'required|email',
+       'password' => 'required|min:8',
+   ]);
+   ```
+2. **Symfony Constraint Objects**:
+   ```php
+   use Symfony\Component\Validator\Constraints as Assert;
+
+   $validated = $validator->validate($data, [
+       'email' => [new Assert\NotBlank(), new Assert\Email()],
+   ]);
+   ```
+3. **PHP 8 Attributes on DTOs**:
+   ```php
+   use Symfony\Component\Validator\Constraints as Assert;
+
+   class UserDto
+   {
+       public function __construct(
+           #[Assert\NotBlank]
+           #[Assert\Email]
+           public string $email
+       ) {}
+   }
+
+   $validator->validate($userDto);
+   ```
 
 ## Application Logging
 
@@ -118,12 +157,18 @@ docker exec -it slim_app php slim list
   php slim seed:create UsersTableSeeder
   ```
 
-## Formatting & Code Styling
+## Code Quality, Refactoring & Styling
 
-This project is integrated with **Laravel Pint** to maintain code neatness (PSR-12/Laravel Style).
+This project uses **Rector** for automated code refactoring and **Laravel Pint** for PSR-12 code styling.
 
-- **Check Code Style**: `composer style-check`
-- **Fix Code Style Automatically**: `composer style-fix`
+- **Check Code Quality & Style**:
+  ```bash
+  docker exec -it slim_app composer fix:check
+  ```
+- **Automatically Apply Refactoring & Code Fixes**:
+  ```bash
+  docker exec -it slim_app composer fix
+  ```
 
 ## Testing
 
