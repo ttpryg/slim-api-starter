@@ -10,12 +10,12 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 
-final class HealthAction
+final readonly class HealthAction
 {
     use ResponseTrait;
 
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private LoggerInterface $logger,
     ) {}
 
     private const STORAGE_DIRS = [
@@ -66,7 +66,7 @@ final class HealthAction
 
     private function checkStorage(): string
     {
-        foreach (self::STORAGE_DIRS as $name => $path) {
+        foreach (self::STORAGE_DIRS as $path) {
             if (! is_dir($path) || ! is_writable($path)) {
                 return 'unreachable';
             }

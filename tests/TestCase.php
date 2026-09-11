@@ -23,8 +23,8 @@ abstract class TestCase extends PHPUnitTestCase
         array $cookies = [],
         array $serverParams = []
     ): Request {
-        $factory = new ServerRequestFactory;
-        $request = $factory->createServerRequest($method, $path, $serverParams);
+        $serverRequestFactory = new ServerRequestFactory;
+        $request = $serverRequestFactory->createServerRequest($method, $path, $serverParams);
 
         foreach ($headers as $name => $value) {
             $request = $request->withHeader($name, $value);

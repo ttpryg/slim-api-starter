@@ -25,36 +25,34 @@ trait TransformTrait
 
     protected function getFractalManager(): Manager
     {
-        if ($this->fractalManager === null) {
-            $this->fractalManager = new Manager;
-        }
+        $this->fractalManager ??= new Manager;
 
         return $this->fractalManager;
     }
 
-    public function item(Response $response, mixed $data, TransformerAbstract $transformer, ?string $resourceKey = null): Response
+    public function item(Response $response, mixed $data, TransformerAbstract $transformerAbstract, ?string $resourceKey = null): Response
     {
-        $resource = new Item($data, $transformer, $resourceKey);
+        $item = new Item($data, $transformerAbstract, $resourceKey);
 
-        return $this->json($response, $this->getFractalManager()->createData($resource)->toArray());
+        return $this->json($response, $this->getFractalManager()->createData($item)->toArray());
     }
 
-    public function collection(Response $response, mixed $data, TransformerAbstract $transformer, ?string $resourceKey = null): Response
+    public function collection(Response $response, mixed $data, TransformerAbstract $transformerAbstract, ?string $resourceKey = null): Response
     {
-        $resource = new Collection($data, $transformer, $resourceKey);
+        $collection = new Collection($data, $transformerAbstract, $resourceKey);
 
-        return $this->json($response, $this->getFractalManager()->createData($resource)->toArray());
+        return $this->json($response, $this->getFractalManager()->createData($collection)->toArray());
     }
 
     public function paginatedCollection(
         Response $response,
-        LengthAwarePaginator $paginator,
-        TransformerAbstract $transformer,
+        LengthAwarePaginator $lengthAwarePaginator,
+        TransformerAbstract $transformerAbstract,
         ?string $resourceKey = null
     ): Response {
-        $resource = new Collection($paginator->getCollection(), $transformer, $resourceKey);
-        $resource->setPaginator(new IlluminatePaginatorAdapter($paginator));
+        $collection = new Collection($lengthAwarePaginator->getCollection(), $transformerAbstract, $resourceKey);
+        $collection->setPaginator(new IlluminatePaginatorAdapter($lengthAwarePaginator));
 
-        return $this->json($response, $this->getFractalManager()->createData($resource)->toArray());
+        return $this->json($response, $this->getFractalManager()->createData($collection)->toArray());
     }
 }

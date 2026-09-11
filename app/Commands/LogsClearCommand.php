@@ -26,11 +26,9 @@ class LogsClearCommand extends Command
         }
 
         $files = glob($logsPath.'/app*');
-        $files = array_filter($files, function ($file) {
-            return basename($file) !== '.gitkeep' && is_file($file);
-        });
+        $files = array_filter($files, fn ($file): bool => basename($file) !== '.gitkeep' && is_file($file));
 
-        if (empty($files)) {
+        if ($files === []) {
             $output->writeln('<info>No log files found.</info>');
 
             return Command::SUCCESS;

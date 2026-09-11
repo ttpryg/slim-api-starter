@@ -14,10 +14,10 @@ use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
-return function (ContainerBuilder $containerBuilder) {
+return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
-        LoggerInterface::class => function (ContainerInterface $c) {
-            $settings = $c->get('settings')['logger'];
+        LoggerInterface::class => function (ContainerInterface $container): Logger {
+            $settings = $container->get('settings')['logger'];
 
             $logger = new Logger($settings['name']);
 
@@ -34,17 +34,17 @@ return function (ContainerBuilder $containerBuilder) {
             return $logger;
         },
 
-        Manager::class => function () {
+        Manager::class => function (): Manager {
             $manager = new Manager;
             $manager->setSerializer(new ArraySerializer);
 
             return $manager;
         },
 
-        Capsule::class => function (ContainerInterface $c) {
+        Capsule::class => function (ContainerInterface $container): Capsule {
             $capsule = new Capsule(new Container);
 
-            $capsule->addConnection($c->get('database'));
+            $capsule->addConnection($container->get('database'));
 
             $capsule->setEventDispatcher(new Dispatcher(new Container));
 
