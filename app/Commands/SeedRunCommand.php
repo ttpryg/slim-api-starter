@@ -30,7 +30,7 @@ class SeedRunCommand extends Command
         $files = array_diff($files, ['.', '..', '.gitkeep']);
         sort($files);
 
-        if (empty($files)) {
+        if ($files === []) {
             $output->writeln('<info>No seeders found.</info>');
 
             return Command::SUCCESS;

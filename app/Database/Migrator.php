@@ -20,7 +20,7 @@ class Migrator
 
         $pending = array_diff($files, $ran);
 
-        if (empty($pending)) {
+        if ($pending === []) {
             return [];
         }
 
@@ -109,7 +109,7 @@ class Migrator
             return;
         }
 
-        Capsule::schema()->create($this->table, function ($table) {
+        Capsule::schema()->create($this->table, function ($table): void {
             $table->id();
             $table->string('migration');
             $table->integer('batch');
@@ -135,7 +135,7 @@ class Migrator
         $files = array_diff($files, ['.', '..', '.gitkeep']);
         sort($files);
 
-        return array_map(fn ($file) => pathinfo($file, PATHINFO_FILENAME), $files);
+        return array_map(fn (string $file): string => pathinfo($file, PATHINFO_FILENAME), $files);
     }
 
     private function resolve(string $path, string $file): Migration

@@ -24,7 +24,7 @@ return [
         'allowed_headers' => explode(',', (getenv('CORS_ALLOWED_HEADERS') ?: 'Content-Type,Authorization,X-Requested-With')),
         'exposed_headers' => explode(',', (getenv('CORS_EXPOSED_HEADERS') ?: '')),
         'max_age' => (int) (getenv('CORS_MAX_AGE') ?: 86400),
-        'allow_credentials' => filter_var(getenv('CORS_ALLOW_CREDENTIALS'), FILTER_VALIDATE_BOOLEAN) ?: false,
+        'allow_credentials' => filter_var(getenv('CORS_ALLOW_CREDENTIALS'), FILTER_VALIDATE_BOOLEAN),
     ],
 
     'jwt' => [

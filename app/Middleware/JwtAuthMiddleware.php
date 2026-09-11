@@ -12,12 +12,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
-final class JwtAuthMiddleware implements MiddlewareInterface
+final readonly class JwtAuthMiddleware implements MiddlewareInterface
 {
     use ResponseTrait;
 
     public function __construct(
-        private readonly array $settings
+        private array $settings
     ) {}
 
     public function process(Request $request, RequestHandler $handler): Response
@@ -35,7 +35,7 @@ final class JwtAuthMiddleware implements MiddlewareInterface
         try {
             $decoded = JWT::decode($token, new Key($this->settings['secret'], $this->settings['algorithm']));
             $request = $request->withAttribute('jwt_payload', (array) $decoded);
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             $response = new \Slim\Psr7\Response;
 
             return $this->error($response, 'Invalid or expired token', 401);

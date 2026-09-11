@@ -30,7 +30,7 @@ class MigrationRollbackCommand extends Command
         $migrator = new Migrator;
         $rolledBack = $migrator->rollback($path, $steps);
 
-        if (empty($rolledBack)) {
+        if ($rolledBack === []) {
             $output->writeln('<info>Nothing to rollback.</info>');
 
             return Command::SUCCESS;

@@ -9,10 +9,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
-final class CorsMiddleware implements MiddlewareInterface
+final readonly class CorsMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly array $settings
+        private array $settings
     ) {}
 
     public function process(Request $request, RequestHandler $handler): Response
@@ -58,7 +58,7 @@ final class CorsMiddleware implements MiddlewareInterface
         }
 
         if ($allowCredentials) {
-            $response = $response->withHeader('Access-Control-Allow-Credentials', 'true');
+            return $response->withHeader('Access-Control-Allow-Credentials', 'true');
         }
 
         return $response;

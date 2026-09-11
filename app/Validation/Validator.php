@@ -7,18 +7,18 @@ namespace App\Validation;
 use App\Exception\ValidationException;
 use Rakit\Validation\Validator as RakitValidator;
 
-final class Validator
+final readonly class Validator
 {
-    private RakitValidator $validator;
+    private RakitValidator $rakitValidator;
 
-    public function __construct(?RakitValidator $validator = null)
+    public function __construct(?RakitValidator $rakitValidator = null)
     {
-        $this->validator = $validator ?? new RakitValidator;
+        $this->rakitValidator = $rakitValidator ?? new RakitValidator;
     }
 
     public function validate(array $data, array $rules, array $messages = []): array
     {
-        $validation = $this->validator->validate($data, $rules, $messages);
+        $validation = $this->rakitValidator->validate($data, $rules, $messages);
 
         if ($validation->fails()) {
             throw new ValidationException($validation->errors()->toArray());

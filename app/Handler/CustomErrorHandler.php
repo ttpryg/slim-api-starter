@@ -52,7 +52,7 @@ final class CustomErrorHandler extends ErrorHandler
         $response = $this->error($response, $message, $statusCode, $errors);
 
         if ($this->exception instanceof HttpMethodNotAllowedException) {
-            $response = $response->withHeader('Allow', implode(', ', $this->exception->getAllowedMethods()));
+            return $response->withHeader('Allow', implode(', ', $this->exception->getAllowedMethods()));
         }
 
         return $response;

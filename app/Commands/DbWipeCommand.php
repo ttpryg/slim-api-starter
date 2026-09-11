@@ -46,8 +46,8 @@ class DbWipeCommand extends Command
 
         $schema->disableForeignKeyConstraints();
 
-        foreach ($tables as $row) {
-            $name = $driver === 'sqlite' ? $row->name : current((array) $row);
+        foreach ($tables as $table) {
+            $name = $driver === 'sqlite' ? $table->name : current((array) $table);
             $schema->dropIfExists($name);
             $output->writeln("<info>Dropped:</info> {$name}");
         }

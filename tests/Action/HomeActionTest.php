@@ -14,8 +14,8 @@ class HomeActionTest extends TestCase
     public function test_home_action_returns_hello_world(): void
     {
         $app = $this->getAppInstance();
-        $request = $this->createRequest('GET', '/');
-        $response = $app->handle($request);
+        $serverRequest = $this->createRequest('GET', '/');
+        $response = $app->handle($serverRequest);
 
         $payload = (string) $response->getBody();
 

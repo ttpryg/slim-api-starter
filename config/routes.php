@@ -10,7 +10,7 @@ use App\Validation\Validator;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
-return function (App $app) {
+return function (App $app): void {
     $app->get('/', HomeAction::class);
 
     // Example: Request Validation
@@ -41,8 +41,8 @@ return function (App $app) {
     $app->get('/health', HealthAction::class);
 
     // Protected API routes (require JWT token)
-    $app->group('/api', function (RouteCollectorProxy $group) {
-        $group->get('/me', function ($request, $response) {
+    $app->group('/api', function (RouteCollectorProxy $routeCollectorProxy): void {
+        $routeCollectorProxy->get('/me', function ($request, $response) {
             $payload = $request->getAttribute('jwt_payload');
             $response->getBody()->write(json_encode([
                 'success' => true,

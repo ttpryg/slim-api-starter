@@ -33,8 +33,8 @@ abstract class GeneratorCommand extends Command
         // Remove .php extension if provided
         $name = str_replace('.php', '', $name);
 
-        $parts = array_filter(explode('/', str_replace('\\', '/', $name)), fn ($p) => ! in_array($p, ['', '.', '..'], true));
-        $parts = array_map([$this, 'studly'], $parts);
+        $parts = array_filter(explode('/', str_replace('\\', '/', $name)), fn ($p): bool => ! in_array($p, ['', '.', '..'], true));
+        $parts = array_map($this->studly(...), $parts);
         $className = array_pop($parts);
 
         if (! $className) {
@@ -49,7 +49,7 @@ abstract class GeneratorCommand extends Command
         $namespace = $baseNamespace;
         $path = $basePath;
 
-        if (! empty($parts)) {
+        if ($parts !== []) {
             $subNamespace = implode('\\', $parts);
             $namespace .= '\\'.$subNamespace;
             $path .= '/'.implode('/', $parts);

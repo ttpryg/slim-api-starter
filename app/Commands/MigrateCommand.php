@@ -23,7 +23,7 @@ class MigrateCommand extends Command
         $migrator = new Migrator;
         $migrated = $migrator->run($path);
 
-        if (empty($migrated)) {
+        if ($migrated === []) {
             $output->writeln('<info>Nothing to migrate.</info>');
 
             return Command::SUCCESS;
