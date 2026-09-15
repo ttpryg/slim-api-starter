@@ -7,9 +7,9 @@ use App\Middleware\CorsMiddleware;
 use App\Middleware\RateLimitMiddleware;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
+use Ttpryg\Config\ConfigRepository;
 
 require __DIR__.'/../vendor/autoload.php';
 
@@ -21,7 +21,7 @@ if (file_exists(__DIR__.'/../.env')) {
 
 $containerBuilder = new ContainerBuilder;
 
-// Set up settings
+// Set up bootstrap settings (database credentials only)
 $settings = require __DIR__.'/../config/settings.php';
 $containerBuilder->addDefinitions($settings);
 
@@ -32,16 +32,16 @@ $dependencies($containerBuilder);
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
 
-// Initialize Eloquent Capsule globally (for commands, models, and web app)
-$container->get(Capsule::class);
+// Get config from container
+$config = $container->get(ConfigRepository::class);
 
 // Instantiate the app
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
 // Register middleware
-$app->add(new RateLimitMiddleware($container->get('rate_limit')));
-$app->add(new CorsMiddleware($container->get('cors')));
+$app->add(new RateLimitMiddleware($config->get('rate_limit')));
+$app->add(new CorsMiddleware($config->get('cors')));
 $app->addBodyParsingMiddleware(); // Parse json, form data and xml
 
 // Register routes
@@ -53,9 +53,9 @@ $app->addRoutingMiddleware();
 
 // Add Error Middleware
 $errorMiddleware = $app->addErrorMiddleware(
-    $container->get('settings')['displayErrorDetails'],
-    $container->get('settings')['logError'],
-    $container->get('settings')['logErrorDetails'],
+    $config->get('settings.displayErrorDetails'),
+    $config->get('settings.logError'),
+    $config->get('settings.logErrorDetails'),
     $container->get(LoggerInterface::class)
 );
 

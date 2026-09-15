@@ -2,7 +2,7 @@
 <?php
 
 $app = require __DIR__.'/config/bootstrap.php';
-$appSettings = $app->getContainer()->get('settings');
+$config = $app->getContainer()->get('config');
 
 use App\Commands\DbWipeCommand;
 use App\Commands\KeyGenerateCommand;
@@ -16,7 +16,7 @@ use App\Commands\SeedCreateCommand;
 use App\Commands\SeedRunCommand;
 use Symfony\Component\Console\Application;
 
-$application = new Application($appSettings['app_name'], $appSettings['app_version']);
+$application = new Application($config->get('settings.app_name'), $config->get('settings.app_version'));
 
 // register commands
 $application->addCommands([
