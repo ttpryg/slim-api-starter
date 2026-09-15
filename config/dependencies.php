@@ -75,13 +75,9 @@ return function (ContainerBuilder $containerBuilder): void {
             return $config;
         },
 
-        'config' => function (ContainerInterface $container): ConfigRepository {
-            return $container->get(ConfigRepository::class);
-        },
+        'config' => fn (ContainerInterface $container): ConfigRepository => $container->get(ConfigRepository::class),
 
-        'jwt' => function (ContainerInterface $container): array {
-            return $container->get(ConfigRepository::class)->get('jwt');
-        },
+        'jwt' => fn (ContainerInterface $container): array => $container->get(ConfigRepository::class)->get('jwt'),
 
         LoggerInterface::class => function (ContainerInterface $container): Logger {
             $config = $container->get(ConfigRepository::class);

@@ -12,12 +12,12 @@ class ConfigDatabaseDriverTest extends TestCase
 {
     private PDO $pdo;
 
-    private ConfigDatabaseDriver $driver;
+    private ConfigDatabaseDriver $configDatabaseDriver;
 
     protected function setUp(): void
     {
         $this->pdo = new PDO('sqlite::memory:');
-        $this->driver = new ConfigDatabaseDriver($this->pdo);
+        $this->configDatabaseDriver = new ConfigDatabaseDriver($this->pdo);
     }
 
     public function test_does_not_auto_create_table(): void
@@ -30,8 +30,8 @@ class ConfigDatabaseDriverTest extends TestCase
     {
         $this->pdo->exec('CREATE TABLE configs (key VARCHAR(255) PRIMARY KEY, value TEXT)');
 
-        $this->driver->set('app.name', 'Test App');
-        $result = $this->driver->get('app.name');
+        $this->configDatabaseDriver->set('app.name', 'Test App');
+        $result = $this->configDatabaseDriver->get('app.name');
 
         $this->assertEquals('Test App', $result);
     }
@@ -40,7 +40,7 @@ class ConfigDatabaseDriverTest extends TestCase
     {
         $this->pdo->exec('CREATE TABLE configs (key VARCHAR(255) PRIMARY KEY, value TEXT)');
 
-        $result = $this->driver->get('nonexistent.key');
+        $result = $this->configDatabaseDriver->get('nonexistent.key');
 
         $this->assertNull($result);
     }
@@ -49,9 +49,9 @@ class ConfigDatabaseDriverTest extends TestCase
     {
         $this->pdo->exec('CREATE TABLE configs (key VARCHAR(255) PRIMARY KEY, value TEXT)');
 
-        $this->driver->set('app.name', 'Original');
-        $this->driver->set('app.name', 'Updated');
-        $result = $this->driver->get('app.name');
+        $this->configDatabaseDriver->set('app.name', 'Original');
+        $this->configDatabaseDriver->set('app.name', 'Updated');
+        $result = $this->configDatabaseDriver->get('app.name');
 
         $this->assertEquals('Updated', $result);
     }
@@ -60,9 +60,9 @@ class ConfigDatabaseDriverTest extends TestCase
     {
         $this->pdo->exec('CREATE TABLE configs (key VARCHAR(255) PRIMARY KEY, value TEXT)');
 
-        $this->driver->set('app.name', 'Test');
-        $this->driver->forget('app.name');
-        $result = $this->driver->get('app.name');
+        $this->configDatabaseDriver->set('app.name', 'Test');
+        $this->configDatabaseDriver->forget('app.name');
+        $result = $this->configDatabaseDriver->get('app.name');
 
         $this->assertNull($result);
     }
@@ -71,9 +71,9 @@ class ConfigDatabaseDriverTest extends TestCase
     {
         $this->pdo->exec('CREATE TABLE configs (key VARCHAR(255) PRIMARY KEY, value TEXT)');
 
-        $this->driver->set('app.name', 'Test App');
-        $this->driver->set('app.version', '1.0.0');
-        $result = $this->driver->all();
+        $this->configDatabaseDriver->set('app.name', 'Test App');
+        $this->configDatabaseDriver->set('app.version', '1.0.0');
+        $result = $this->configDatabaseDriver->all();
 
         $this->assertEquals([
             'app.name' => 'Test App',
@@ -85,18 +85,18 @@ class ConfigDatabaseDriverTest extends TestCase
     {
         $this->pdo->exec('CREATE TABLE configs (key VARCHAR(255) PRIMARY KEY, value TEXT)');
 
-        $result = $this->driver->all();
+        $result = $this->configDatabaseDriver->all();
 
         $this->assertEquals([], $result);
     }
 
     public function test_with_custom_table_name(): void
     {
-        $driver = new ConfigDatabaseDriver($this->pdo, 'app_settings');
+        $configDatabaseDriver = new ConfigDatabaseDriver($this->pdo, 'app_settings');
         $this->pdo->exec('CREATE TABLE app_settings (key VARCHAR(255) PRIMARY KEY, value TEXT)');
 
-        $driver->set('app.name', 'Test');
-        $result = $driver->get('app.name');
+        $configDatabaseDriver->set('app.name', 'Test');
+        $result = $configDatabaseDriver->get('app.name');
 
         $this->assertEquals('Test', $result);
     }
