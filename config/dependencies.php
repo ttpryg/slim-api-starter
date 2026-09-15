@@ -16,6 +16,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidatorInterface;
+use Ttpryg\Config\ConfigRepository;
 
 return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
@@ -26,17 +27,18 @@ return function (ContainerBuilder $containerBuilder): void {
         Validator::class => fn (ContainerInterface $container): Validator => new Validator($container->get(SymfonyValidatorInterface::class)),
 
         LoggerInterface::class => function (ContainerInterface $container): Logger {
-            $settings = $container->get('settings')['logger'];
+            $config = $container->get(ConfigRepository::class);
+            $loggerSettings = $config->get('settings.logger');
 
-            $logger = new Logger($settings['name']);
+            $logger = new Logger($loggerSettings['name']);
 
             $processor = new UidProcessor;
             $logger->pushProcessor($processor);
 
             $handler = new RotatingFileHandler(
-                $settings['path'],
-                $settings['maxFiles'],
-                $settings['level']
+                $loggerSettings['path'],
+                $loggerSettings['maxFiles'],
+                $loggerSettings['level']
             );
             $logger->pushHandler($handler);
 
