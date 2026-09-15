@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-use App\Config\Drivers\ConfigDatabaseDriver;
 use App\Handler\CustomErrorHandler;
 use App\Middleware\CorsMiddleware;
 use App\Middleware\RateLimitMiddleware;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
-use Ttpryg\Config\ConfigManager;
 use Ttpryg\Config\ConfigRepository;
 
 require __DIR__.'/../vendor/autoload.php';
@@ -35,20 +32,8 @@ $dependencies($containerBuilder);
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
 
-// Initialize Eloquent Capsule globally (for commands, models, and web app)
-$capsule = $container->get(Capsule::class);
-
-// Load config from database
-$pdo = $capsule->connection()->getPdo();
-$driver = new ConfigDatabaseDriver($pdo);
-$config = ConfigManager::createFromDatabase($driver);
-
-// Register config in container
-$containerBuilder->addDefinitions([
-    ConfigRepository::class => $config,
-    'config' => $config,
-]);
-$container = $containerBuilder->build();
+// Get config from container
+$config = $container->get(ConfigRepository::class);
 
 // Instantiate the app
 AppFactory::setContainer($container);
