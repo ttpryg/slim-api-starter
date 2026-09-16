@@ -4,21 +4,24 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Psr7\Factory\ResponseFactory;
 
 final readonly class CorsMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private array $settings
+        private array $settings,
+        private ResponseFactoryInterface $responseFactory = new ResponseFactory
     ) {}
 
     public function process(Request $request, RequestHandler $handler): Response
     {
         if ($request->getMethod() === 'OPTIONS') {
-            $response = new \Slim\Psr7\Response;
+            $response = $this->responseFactory->createResponse();
 
             return $this->addCorsHeaders($request, $response);
         }

@@ -40,8 +40,8 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 
 // Register middleware
-$app->add(new RateLimitMiddleware($config->get('rate_limit')));
-$app->add(new CorsMiddleware($config->get('cors')));
+$app->add(new RateLimitMiddleware($config->get('rate_limit'), $app->getResponseFactory()));
+$app->add(new CorsMiddleware($config->get('cors'), $app->getResponseFactory()));
 $app->addBodyParsingMiddleware(); // Parse json, form data and xml
 
 // Register routes

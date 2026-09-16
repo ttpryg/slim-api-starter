@@ -7,17 +7,20 @@ namespace App\Middleware;
 use App\Traits\ResponseTrait;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Psr7\Factory\ResponseFactory;
 
 final readonly class JwtAuthMiddleware implements MiddlewareInterface
 {
     use ResponseTrait;
 
     public function __construct(
-        private array $settings
+        private array $settings,
+        private ResponseFactoryInterface $responseFactory = new ResponseFactory
     ) {}
 
     public function process(Request $request, RequestHandler $handler): Response
@@ -25,7 +28,7 @@ final readonly class JwtAuthMiddleware implements MiddlewareInterface
         $authHeader = $request->getHeaderLine('Authorization');
 
         if (empty($authHeader) || strncasecmp($authHeader, 'Bearer ', 7) !== 0) {
-            $response = new \Slim\Psr7\Response;
+            $response = $this->responseFactory->createResponse(401);
 
             return $this->error($response, 'Missing or malformed Authorization header', 401);
         }
@@ -36,7 +39,7 @@ final readonly class JwtAuthMiddleware implements MiddlewareInterface
             $decoded = JWT::decode($token, new Key($this->settings['secret'], $this->settings['algorithm']));
             $request = $request->withAttribute('jwt_payload', (array) $decoded);
         } catch (\Throwable) {
-            $response = new \Slim\Psr7\Response;
+            $response = $this->responseFactory->createResponse(401);
 
             return $this->error($response, 'Invalid or expired token', 401);
         }

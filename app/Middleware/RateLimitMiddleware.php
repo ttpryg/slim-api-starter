@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Psr7\Factory\ResponseFactory;
 
 final readonly class RateLimitMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private array $settings
+        private array $settings,
+        private ResponseFactoryInterface $responseFactory = new ResponseFactory
     ) {}
 
     public function process(Request $request, RequestHandler $handler): Response
@@ -50,7 +53,7 @@ final readonly class RateLimitMiddleware implements MiddlewareInterface
                 flock($fp, LOCK_UN);
                 fclose($fp);
 
-                $response = new \Slim\Psr7\Response;
+                $response = $this->responseFactory->createResponse(429);
                 $response->getBody()->write(json_encode([
                     'success' => false,
                     'message' => 'Too many requests. Please try again later.',
@@ -58,7 +61,6 @@ final readonly class RateLimitMiddleware implements MiddlewareInterface
 
                 return $response
                     ->withHeader('Content-Type', 'application/json')
-                    ->withStatus(429)
                     ->withHeader('Retry-After', (string) $window);
             }
 
