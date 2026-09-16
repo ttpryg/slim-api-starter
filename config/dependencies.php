@@ -14,13 +14,30 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UploadedFileFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Psr7\Factory\ResponseFactory;
+use Slim\Psr7\Factory\ServerRequestFactory;
+use Slim\Psr7\Factory\StreamFactory;
+use Slim\Psr7\Factory\UploadedFileFactory;
+use Slim\Psr7\Factory\UriFactory;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidatorInterface;
 use Ttpryg\Config\ConfigRepository;
 
 return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([
+        // PSR-17 HTTP Factories
+        ResponseFactoryInterface::class => fn (): ResponseFactoryInterface => new ResponseFactory,
+        ServerRequestFactoryInterface::class => fn (): ServerRequestFactoryInterface => new ServerRequestFactory,
+        StreamFactoryInterface::class => fn (): StreamFactoryInterface => new StreamFactory,
+        UriFactoryInterface::class => fn (): UriFactoryInterface => new UriFactory,
+        UploadedFileFactoryInterface::class => fn (): UploadedFileFactoryInterface => new UploadedFileFactory,
+
         SymfonyValidatorInterface::class => fn (): SymfonyValidatorInterface => Validation::createValidatorBuilder()
             ->enableAttributeMapping()
             ->getValidator(),
