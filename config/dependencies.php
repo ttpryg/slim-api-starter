@@ -38,7 +38,7 @@ return function (ContainerBuilder $containerBuilder): void {
                     $driver = new ConfigDatabaseDriver($pdo);
                     $config->loadDatabase($driver);
                 }
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 // Ignore DB connection issues or missing table during initial setup
             }
 
