@@ -15,7 +15,7 @@
         "slim/psr7": "^1.6",
         "slim/slim": "^4.12",
         "symfony/console": "^7.4",
-        "symfony/validator": "^7.4",
+        "symfony/validator": "^8.1",
         "ttpryg/config": "dev-develop",
         "vlucas/phpdotenv": "^5.6"
     },
