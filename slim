@@ -9,8 +9,12 @@ use App\Commands\KeyGenerateCommand;
 use App\Commands\LogsClearCommand;
 use App\Commands\MakeActionCommand;
 use App\Commands\MakeMigrationCommand;
+use App\Commands\MakeMiddlewareCommand;
 use App\Commands\MakeModelCommand;
+use App\Commands\MakeTransformerCommand;
 use App\Commands\MigrateCommand;
+use App\Commands\MigrateRefreshCommand;
+use App\Commands\MigrateResetCommand;
 use App\Commands\MigrationRollbackCommand;
 use App\Commands\SeedCreateCommand;
 use App\Commands\SeedRunCommand;
@@ -24,9 +28,13 @@ $application->addCommands([
     new KeyGenerateCommand,
     new LogsClearCommand,
     new MakeActionCommand,
+    new MakeMiddlewareCommand,
     new MakeModelCommand,
     new MakeMigrationCommand,
+    new MakeTransformerCommand,
     new MigrateCommand,
+    new MigrateRefreshCommand,
+    new MigrateResetCommand,
     new MigrationRollbackCommand,
     new SeedCreateCommand,
     new SeedRunCommand,

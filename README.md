@@ -179,7 +179,28 @@ docker exec -it slim_app php slim list
 - **Create a Seeder**:
   Generates a new database seeder class.
   ```bash
-  php slim seed:create UsersTableSeeder
+  php slim make:seeder UsersTableSeeder   # or php slim seed:create
+  ```
+- **Make a Middleware**:
+  Generates a PSR-15 middleware class.
+  ```bash
+  php slim make:middleware Auth/CheckApiKeyMiddleware
+  ```
+- **Make a Transformer**:
+  Generates a Fractal resource transformer class.
+  ```bash
+  php slim make:transformer UserTransformer
+  ```
+- **Reset Migrations**:
+  Rolls back all database migrations.
+  ```bash
+  php slim migrate:reset
+  ```
+- **Refresh Migrations**:
+  Resets and re-runs all migrations (with optional `--seed`).
+  ```bash
+  php slim migrate:refresh
+  php slim migrate:refresh --seed
   ```
 
 ## Code Quality, Refactoring & Styling

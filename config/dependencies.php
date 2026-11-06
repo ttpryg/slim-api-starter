@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\I18n\Translator;
 use DI\ContainerBuilder;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -42,6 +43,8 @@ return function (ContainerBuilder $containerBuilder): void {
             ->getValidator(),
 
         Validator::class => fn (ContainerInterface $container): Validator => new Validator($container->get(SymfonyValidatorInterface::class)),
+
+        Translator::class => fn (): Translator => new Translator('en'),
 
         ConfigRepository::class => function (ContainerInterface $container): ConfigRepository {
             $staticSettings = require __DIR__.'/settings.php';
