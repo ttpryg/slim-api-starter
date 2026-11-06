@@ -158,7 +158,7 @@ docker exec -it slim_app php slim list
 - **Run Migrations**:
   Runs all pending database migrations.
   ```bash
-  php slim migrate
+  php slim migrate          # or php slim migrate:run
   ```
 - **Rollback Migrations**:
   Rolls back the last batch of migrations.
