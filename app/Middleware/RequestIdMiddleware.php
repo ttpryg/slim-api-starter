@@ -30,15 +30,7 @@ final readonly class RequestIdMiddleware implements MiddlewareInterface
         // Push request_id to Monolog extra processor if logger is a Monolog instance
         $resetLogger = null;
         if ($this->logger instanceof Logger) {
-            $resetLogger = $this->logger->pushProcessor(function (array|LogRecord $record) use ($requestId): LogRecord|array {
-                if ($record instanceof LogRecord) {
-                    return $record->with(extra: array_merge($record->extra, ['request_id' => $requestId]));
-                }
-
-                $record['extra']['request_id'] = $requestId;
-
-                return $record;
-            });
+            $resetLogger = $this->logger->pushProcessor(fn (LogRecord $record): LogRecord => $record->with(extra: array_merge($record->extra, ['request_id' => $requestId])));
         }
 
         try {

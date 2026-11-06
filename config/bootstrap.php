@@ -14,9 +14,13 @@ use Ttpryg\Config\ConfigRepository;
 
 require __DIR__.'/../vendor/autoload.php';
 
-// Load .env file
-if (file_exists(__DIR__.'/../.env')) {
-    $dotenv = Dotenv::createImmutable(__DIR__.'/../');
+// Load .env or .env.testing file
+$envFile = (getenv('APP_ENV') === 'testing' || ($_ENV['APP_ENV'] ?? null) === 'testing') && file_exists(__DIR__.'/../.env.testing')
+    ? '.env.testing'
+    : '.env';
+
+if (file_exists(__DIR__.'/../'.$envFile)) {
+    $dotenv = Dotenv::createImmutable(__DIR__.'/../', $envFile);
     $dotenv->load();
 }
 

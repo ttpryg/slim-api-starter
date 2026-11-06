@@ -11,6 +11,32 @@ use Slim\Psr7\Factory\ServerRequestFactory;
 
 abstract class TestCase extends PHPUnitTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (method_exists($this, 'setUpRefreshDatabase')) {
+            $this->setUpRefreshDatabase();
+        }
+
+        if (method_exists($this, 'setUpDatabaseTransactions')) {
+            $this->setUpDatabaseTransactions();
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        if (method_exists($this, 'tearDownDatabaseTransactions')) {
+            $this->tearDownDatabaseTransactions();
+        }
+
+        if (method_exists($this, 'tearDownRefreshDatabase')) {
+            $this->tearDownRefreshDatabase();
+        }
+
+        parent::tearDown();
+    }
+
     protected function getAppInstance(): App
     {
         return require __DIR__.'/../config/bootstrap.php';
