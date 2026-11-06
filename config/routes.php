@@ -6,9 +6,9 @@ use App\Action\HealthAction;
 use App\Action\HomeAction;
 use App\Action\UserListAction;
 use App\Middleware\JwtAuthMiddleware;
-use App\Validation\Validator;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
+use Ttpryg\Validation\Validator;
 
 return function (App $app): void {
     $app->get('/', HomeAction::class);

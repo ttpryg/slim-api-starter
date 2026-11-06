@@ -1,6 +1,6 @@
 # Slim 4 API Starter
 
-A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent ORM, Symfony Validator, Rector, and Docker.
+A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent ORM, ttpryg/validation, Rector, and Docker.
 
 ## Folder Structure
 
@@ -15,8 +15,7 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 │   ├── Middleware/     # PSR-15 Middleware (CORS, JWT, Rate Limit)
 │   ├── Model/          # Eloquent Models
 │   ├── Traits/         # Reusable Traits (ResponseTrait, TransformTrait)
-│   ├── Transformer/    # Fractal resource transformers
-│   └── Validation/     # Request validation wrapper (Symfony Validator)
+│   └── Transformer/    # Fractal resource transformers
 ├── config/             # Configuration (Routes, Container, Settings, DB)
 ├── db/                 # Database Migrations & Seeds
 ├── public/             # Document root (Entry point index.php)
@@ -38,7 +37,7 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 - **PHP-DI 7** (Dependency Injection)
 - **Eloquent ORM** (Database Management)
 - **Illuminate Database** (Database Migrations & Schema Builder)
-- **Symfony Validator** (Request Validation & DTO Validation)
+- **ttpryg/validation** (Laravel-style validation & DTO validation powered by Symfony Validator)
 - **Symfony Console** (Custom CLI Generator)
 - **Monolog** (Rotating File-based Error Logging)
 - **Rector 2** (Automated Code Refactoring & Quality Checks)
@@ -62,10 +61,13 @@ A robust starter project using Slim Framework 4 with PHP 8.2, PHP-DI, Eloquent O
 
 ## Request Validation
 
-This starter features `App\Validation\Validator` built on top of **Symfony Validator**. It supports three flexible validation styles:
+This starter features `Ttpryg\Validation\Validator` (`ttpryg/validation`) built on top of **Symfony Validator**. It supports three flexible validation styles:
 
 1. **Array String Rules** (Laravel-style string rules for convenience):
    ```php
+   use Ttpryg\Validation\Validator;
+
+   $validator = new Validator();
    $validated = $validator->validate((array) $request->getParsedBody(), [
        'name' => 'required|min:3|max:255',
        'email' => 'required|email',
