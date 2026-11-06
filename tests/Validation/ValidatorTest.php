@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Test\Validation;
 
-use App\Exception\ValidationException;
 use App\Test\TestCase;
-use App\Validation\Validator;
 use Symfony\Component\Validator\Constraints as Assert;
+use Ttpryg\Validation\Exception\ValidationException;
+use Ttpryg\Validation\Validator;
 
 class UserDto
 {

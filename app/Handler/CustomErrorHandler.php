@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Handler;
 
-use App\Exception\ValidationException;
 use App\Traits\ResponseTrait;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpException;
 use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Handlers\ErrorHandler;
+use Ttpryg\Validation\Exception\ValidationException;
 
 final class CustomErrorHandler extends ErrorHandler
 {

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Config\Drivers\ConfigDatabaseDriver;
-use App\Validation\Validator;
 use DI\ContainerBuilder;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -28,6 +26,7 @@ use Slim\Psr7\Factory\UriFactory;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidatorInterface;
 use Ttpryg\Config\ConfigRepository;
+use Ttpryg\Validation\Validator;
 
 return function (ContainerBuilder $containerBuilder): void {
     $containerBuilder->addDefinitions([

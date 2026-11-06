@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3fbe72b0020fe88bf162619d0c1b32f0",
+    "content-hash": "5f0b6908108753c7d4b2ebdf96906469",
     "packages": [
         {
             "name": "brick/math",
@@ -3540,6 +3540,62 @@
             "time": "2026-09-15T02:18:46+00:00"
         },
         {
+            "name": "ttpryg/validation",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ttpryg/validation.git",
+                "reference": "3eb3c51e1c4c5e2c67788dbab432ecd45bd12a03"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ttpryg/validation/zipball/3eb3c51e1c4c5e2c67788dbab432ecd45bd12a03",
+                "reference": "3eb3c51e1c4c5e2c67788dbab432ecd45bd12a03",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1",
+                "symfony/validator": "^6.4 || ^7.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.20",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^10.0",
+                "rector/rector": "^2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ttpryg\\Validation\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Toto",
+                    "email": "totoprayogo1916@gmail.com",
+                    "homepage": "https://ttpryg.my.id"
+                }
+            ],
+            "description": "Framework-agnostic Laravel-style validation layer on top of Symfony Validator for PHP 8.1+.",
+            "keywords": [
+                "constraints",
+                "rules",
+                "symfony-validator",
+                "validation",
+                "validator"
+            ],
+            "support": {
+                "issues": "https://github.com/ttpryg/validation/issues",
+                "source": "https://github.com/ttpryg/validation/tree/v1.0.0"
+            },
+            "time": "2026-11-06T11:08:41+00:00",
+            "published-time": "2026-11-06T11:34:51+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.8.0",
             "source": {
@@ -5554,5 +5610,5 @@
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }
