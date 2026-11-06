@@ -6,6 +6,7 @@ parameters:
     excludePaths:
         - tests/bootstrap.php
     treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - identifier: missingType.iterableValue
         - identifier: missingType.generics
