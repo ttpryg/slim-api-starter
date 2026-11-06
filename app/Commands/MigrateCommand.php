@@ -11,8 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'migrate',
+    name: 'migrate:run',
     description: 'Run pending database migrations',
+    aliases: ['migrate'],
 )]
 class MigrateCommand extends Command
 {
