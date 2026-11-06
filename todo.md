@@ -16,16 +16,20 @@ Meskipun *starter* ini sudah sangat solid, masih ada beberapa fitur krusial yang
 
 ## 4. Testing & QA
 - [ ] **Database Testing Trait**: Buat *helper trait* untuk PHPUnit yang akan melakukan migrasi dan *rollback* (atau membungkus dalam *DB Transaction*) sebelum dan sesudah menjalankan *test* agar *database state* tetap bersih.
-- [ ] **CI/CD Pipeline**: Tambahkan file workflow GitHub Actions (`.github/workflows/main.yml`) untuk menjalankan `composer test` dan pengecekan kode otomatis (`composer style-check`) di setiap Pull Request.
+- [ ] **Pemisahan Environment (Testing vs Dev)**: Memperbarui `phpunit.xml` dan pengaturan bootstrap agar pengujian (*unit test*) menggunakan database atau environment terpisah (misal SQLite in-memory / `.env.testing`) sehingga tidak merusak data lokal.
+- [ ] **Static Analysis (PHPStan)**: Integrasikan `phpstan/phpstan` (level 6-8) ke dalam pipeline dev/test untuk mendeteksi type mismatch, dead code, dan null-safety sebelum runtime.
+- [ ] **CI/CD Pipeline**: Tambahkan file workflow GitHub Actions (`.github/workflows/main.yml`) untuk menjalankan syntax check, code style (`pint`), static analysis (`phpstan`), dan unit test (`phpunit`) secara otomatis di setiap Pull Request.
 
 ## 5. API Documentation
-- [ ] **Swagger/OpenAPI**: Integrasikan library seperti `zircote/swagger-php` agar dokumentasi API bisa di-generate secara otomatis berdasarkan *attributes/annotations* di class Action.
+- [ ] **Swagger/OpenAPI**: Integrasikan library seperti `zircote/swagger-php` agar dokumentasi API bisa di-generate secara otomatis berdasarkan *attributes/annotations* di class Action dan sediakan viewer UI (Swagger UI / Scalar) di route `/docs`.
 
 ## 6. Architecture & Monitoring
 - [x] **Health Check Endpoint**: Tambahkan endpoint publik (misal: `/health` atau `/ping`) yang tidak diproteksi, bertugas untuk melakukan *ping* ke database dan memastikan semua servis internal berjalan dengan baik.
+- [x] **Request ID / Correlation ID Middleware**: Buat middleware untuk membaca/menghasilkan header `X-Request-Id` (UUID) yang diteruskan ke response header dan disisipkan ke context logger Monolog guna mempermudah *request tracing* di production.
+- [x] **Form Request / Validation Middleware Pattern**: Sediakan abstraction Form Request / Validation Middleware terintegrasi dengan `ttpryg/validation` agar aksi/controller tidak perlu memanggil proses validasi secara prosedural di body controller.
 
 ## 7. Additional Enhancements (Dari Review Lanjutan)
 - [x] **Log Rotation**: Mengganti `StreamHandler` menjadi `RotatingFileHandler` agar file log (`storage/logs/app.log`) dibatasi dan dirotasi berdasarkan tanggal untuk mencegah pembengkakan memori. (Selesai diterapkan!)
-- [ ] **Generator Command Database Seeder**: Membuat command `make:seeder` pada CLI terpadu kita untuk mempermudah pembuatan file *seeder* Phinx.
-- [ ] **Pemisahan Environment (Testing vs Dev)**: Memperbarui `phpunit.xml` dan pengaturan bootstrap agar pengujian (*unit test*) menggunakan database atau environment terpisah sehingga tidak merusak data lokal.
+- [ ] **Generator Command Database Seeder**: Membuat command `make:seeder` pada CLI terpadu kita untuk mempermudah pembuatan file *seeder* Phinx/Database.
+- [ ] **CLI Generators Lengkap**: Tambahkan command `make:middleware` dan `make:transformer` pada CLI console (`./slim`).
 - [ ] **Localization (i18n)**: Menambahkan dukungan multi-bahasa untuk pesan balasan (seperti error validasi) berdasarkan header `Accept-Language` yang dikirim dari *client*.

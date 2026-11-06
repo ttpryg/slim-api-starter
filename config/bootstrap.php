@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Handler\CustomErrorHandler;
 use App\Middleware\CorsMiddleware;
 use App\Middleware\RateLimitMiddleware;
+use App\Middleware\RequestIdMiddleware;
 use DI\ContainerBuilder;
 use Dotenv\Dotenv;
 use Psr\Log\LoggerInterface;
@@ -40,6 +41,7 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 
 // Register middleware
+$app->add(new RequestIdMiddleware($container->get(LoggerInterface::class)));
 $app->add(new RateLimitMiddleware($config->get('rate_limit'), $app->getResponseFactory()));
 $app->add(new CorsMiddleware($config->get('cors'), $app->getResponseFactory()));
 $app->addBodyParsingMiddleware(); // Parse json, form data and xml

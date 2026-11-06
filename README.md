@@ -98,11 +98,34 @@ This starter features `Ttpryg\Validation\Validator` (`ttpryg/validation`) built 
    $validator->validate($userDto);
    ```
 
-## Application Logging
+4. **Form Request / Validation Middleware**:
+   Dapat dibuat terpisah sebagai class yang meng-extend `App\Validation\FormRequest`:
+   ```php
+   use App\Validation\FormRequest;
 
-This starter comes pre-configured with **Monolog** (`RotatingFileHandler`) for error and debug logging.
-- Any unhandled exceptions or internal Slim errors will be automatically logged to:
-  `storage/logs/app-YYYY-MM-DD.log` (rotated daily, max 14 files retained)
+   class RegisterRequest extends FormRequest
+   {
+       public function rules(): array
+       {
+           return [
+               'name' => 'required|min:3',
+               'email' => 'required|email',
+           ];
+       }
+   }
+   ```
+   Pasang pada route sebagai middleware:
+   ```php
+   $app->post('/users', CreateUserAction::class)->add(new RegisterRequest());
+   ```
+   Di Action, ambil data yang sudah tervalidasi via `$request->getAttribute('validated')` atau `$request->getAttribute('form_request')->validated()`.
+
+## Application Logging & Request Tracing
+
+This starter comes pre-configured with **Monolog** (`RotatingFileHandler`) dan **RequestIdMiddleware** (`X-Request-Id`):
+- Setiap HTTP request otomatis disematkan UUID di header `X-Request-Id` (atau meneruskan header dari client jika ada).
+- Header `X-Request-Id` disisipkan ke context logger Monolog secara otomatis untuk mempermudah audit/tracing.
+- Log tersimpan di: `storage/logs/app-YYYY-MM-DD.log` (rotated daily, max 14 files retained).
 - You can inject `Psr\Log\LoggerInterface` into your actions to log custom messages manually:
   ```php
   public function __construct(private \Psr\Log\LoggerInterface $logger) {}
