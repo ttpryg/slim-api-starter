@@ -8,6 +8,8 @@ use App\Commands\DbWipeCommand;
 use App\Commands\KeyGenerateCommand;
 use App\Commands\LogsClearCommand;
 use App\Commands\MakeActionCommand;
+use App\Commands\MakeFactoryCommand;
+use App\Commands\MakeJobCommand;
 use App\Commands\MakeMigrationCommand;
 use App\Commands\MakeMiddlewareCommand;
 use App\Commands\MakeModelCommand;
@@ -19,8 +21,17 @@ use App\Commands\MigrationRollbackCommand;
 use App\Commands\SeedCreateCommand;
 use App\Commands\SeedRunCommand;
 use Symfony\Component\Console\Application;
+use Ttpryg\Queue\Console\Commands\ClearCommand as QueueClearCommand;
+use Ttpryg\Queue\Console\Commands\FailedCommand as QueueFailedCommand;
+use Ttpryg\Queue\Console\Commands\FlushCommand as QueueFlushCommand;
+use Ttpryg\Queue\Console\Commands\ForgetCommand as QueueForgetCommand;
+use Ttpryg\Queue\Console\Commands\RetryCommand as QueueRetryCommand;
+use Ttpryg\Queue\Console\Commands\WorkCommand as QueueWorkCommand;
+use Ttpryg\Queue\Contracts\QueueInterface;
 
 $application = new Application($config->get('settings.app_name'), $config->get('settings.app_version'));
+
+$queue = $app->getContainer()->get(QueueInterface::class);
 
 // register commands
 $application->addCommands([
@@ -28,6 +39,8 @@ $application->addCommands([
     new KeyGenerateCommand,
     new LogsClearCommand,
     new MakeActionCommand,
+    new MakeFactoryCommand,
+    new MakeJobCommand,
     new MakeMiddlewareCommand,
     new MakeModelCommand,
     new MakeMigrationCommand,
@@ -38,6 +51,12 @@ $application->addCommands([
     new MigrationRollbackCommand,
     new SeedCreateCommand,
     new SeedRunCommand,
+    new QueueWorkCommand($queue),
+    new QueueClearCommand($queue),
+    new QueueFailedCommand($queue),
+    new QueueFlushCommand($queue),
+    new QueueForgetCommand($queue),
+    new QueueRetryCommand($queue),
 ]);
 
 exit($application->run());

@@ -35,7 +35,7 @@ Meskipun *starter* ini sudah sangat solid, masih ada beberapa fitur krusial yang
 - [x] **Localization (i18n)**: Menambahkan dukungan multi-bahasa untuk pesan balasan (seperti error validasi / messages) berdasarkan header `Accept-Language` yang dikirim dari *client*.
 
 ## 8. Enterprise & Scaling Roadmap
-- [ ] **File Storage Abstraction (Flysystem)**: Integrasikan `league/flysystem` dengan multi-driver (`local` dan `s3`) untuk manajemen upload file dan routing file statis (`/storage/*`).
-- [ ] **Asynchronous Jobs & Queue Worker**: Integrasikan antrean background jobs (Redis/Database) dan worker command CLI `php slim queue:work` untuk tugas asynchronous seperti email dan webhook.
-- [ ] **Caching Layer (PSR-16)**: Sediakan abstraction cache (Redis / File) berbasis `SimpleCacheInterface` dengan cache helper method.
-- [ ] **Model Factory Pattern**: Tambahkan model factory generator (`php slim make:factory`) dan integrasi FakerPHP untuk pembuatan dummy data pengujian dan seeding yang ekspresif.
+- [x] **File Storage Abstraction (Flysystem)**: Integrasikan `league/flysystem` dengan multi-driver (`local` dan `s3`) untuk manajemen upload file dan storage disk.
+- [x] **Asynchronous Jobs & Queue Worker**: Integrasikan antrean background jobs via `ttpryg/queue` dan worker command CLI (`php slim queue:work`, `queue:retry`, `queue:failed`, dll.) serta generator command `php slim make:job`.
+- [x] **Caching Layer (PSR-16)**: Sediakan abstraction cache berbasis `SimpleCacheInterface` dengan cache helper method (`remember`, `get`, `set`).
+- [x] **Model Factory Pattern**: Tambahkan model factory generator (`php slim make:factory`) dan integrasi FakerPHP untuk pembuatan dummy data pengujian dan seeding yang ekspresif.

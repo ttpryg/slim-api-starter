@@ -2,11 +2,16 @@
 
 declare(strict_types=1);
 
+use App\Cache\FileCache;
+use App\Config\Drivers\ConfigDatabaseDriver;
 use App\I18n\Translator;
+use App\Queue\LazyCapsuleDatabaseAdapter;
+use App\Storage\StorageManager;
 use DI\ContainerBuilder;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
+use League\Flysystem\FilesystemOperator;
 use League\Fractal\Manager;
 use League\Fractal\Serializer\ArraySerializer;
 use Monolog\Handler\RotatingFileHandler;
@@ -19,6 +24,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Log\LoggerInterface;
+use Psr\SimpleCache\CacheInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 use Slim\Psr7\Factory\StreamFactory;
@@ -27,6 +33,9 @@ use Slim\Psr7\Factory\UriFactory;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidatorInterface;
 use Ttpryg\Config\ConfigRepository;
+use Ttpryg\Queue\Config\QueueConfig;
+use Ttpryg\Queue\Contracts\QueueInterface;
+use Ttpryg\Queue\QueueManager;
 use Ttpryg\Validation\Validator;
 
 return function (ContainerBuilder $containerBuilder): void {
@@ -106,5 +115,38 @@ return function (ContainerBuilder $containerBuilder): void {
 
             return $capsule;
         },
+
+        StorageManager::class => fn (): StorageManager => new StorageManager([
+            'local' => [
+                'driver' => 'local',
+                'root' => __DIR__.'/../storage/app',
+            ],
+            'public' => [
+                'driver' => 'local',
+                'root' => __DIR__.'/../storage/app/public',
+            ],
+        ]),
+
+        FilesystemOperator::class => fn (ContainerInterface $container): FilesystemOperator => $container->get(StorageManager::class)->disk(),
+
+        CacheInterface::class => fn (): CacheInterface => new FileCache(__DIR__.'/../storage/cache'),
+
+        QueueManager::class => function (ContainerInterface $container): QueueManager {
+            $capsule = $container->get(Capsule::class);
+            $logger = $container->get(LoggerInterface::class);
+
+            $config = QueueConfig::fromArray([
+                'defaultHandler' => 'database',
+                'database' => [
+                    'table' => 'queue_jobs',
+                ],
+            ]);
+
+            $dbAdapter = new LazyCapsuleDatabaseAdapter($capsule);
+
+            return new QueueManager($config, $dbAdapter, $logger);
+        },
+
+        QueueInterface::class => fn (ContainerInterface $container): QueueInterface => $container->get(QueueManager::class)->init(),
     ]);
 };

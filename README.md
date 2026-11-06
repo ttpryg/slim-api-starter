@@ -191,6 +191,16 @@ docker exec -it slim_app php slim list
   ```bash
   php slim make:transformer UserTransformer
   ```
+- **Make a Job**:
+  Generates a new queue job class for background execution.
+  ```bash
+  php slim make:job SendEmailJob
+  ```
+- **Make a Factory**:
+  Generates an Eloquent model factory powered by FakerPHP.
+  ```bash
+  php slim make:factory UserFactory
+  ```
 - **Reset Migrations**:
   Rolls back all database migrations.
   ```bash
@@ -201,6 +211,14 @@ docker exec -it slim_app php slim list
   ```bash
   php slim migrate:refresh
   php slim migrate:refresh --seed
+  ```
+- **Queue Worker Commands**:
+  Process asynchronous background jobs:
+  ```bash
+  php slim queue:work           # Run queue worker
+  php slim queue:failed         # List failed jobs
+  php slim queue:retry          # Retry all failed jobs
+  php slim queue:clear          # Clear queue
   ```
 
 ## Code Quality, Refactoring & Styling
