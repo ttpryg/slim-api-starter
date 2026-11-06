@@ -30,6 +30,6 @@ Meskipun *starter* ini sudah sangat solid, masih ada beberapa fitur krusial yang
 
 ## 7. Additional Enhancements (Dari Review Lanjutan)
 - [x] **Log Rotation**: Mengganti `StreamHandler` menjadi `RotatingFileHandler` agar file log (`storage/logs/app.log`) dibatasi dan dirotasi berdasarkan tanggal untuk mencegah pembengkakan memori. (Selesai diterapkan!)
-- [ ] **Generator Command Database Seeder**: Membuat command `make:seeder` pada CLI terpadu kita untuk mempermudah pembuatan file *seeder* Phinx/Database.
-- [ ] **CLI Generators Lengkap**: Tambahkan command `make:middleware` dan `make:transformer` pada CLI console (`./slim`).
-- [ ] **Localization (i18n)**: Menambahkan dukungan multi-bahasa untuk pesan balasan (seperti error validasi) berdasarkan header `Accept-Language` yang dikirim dari *client*.
+- [x] **Generator Command Database Seeder**: Membuat command `make:seeder` (alias `seed:create`) pada CLI terpadu kita untuk mempermudah pembuatan file *seeder*.
+- [x] **CLI Generators Lengkap**: Tambahkan command `make:middleware`, `make:transformer`, `migrate:reset`, dan `migrate:refresh` pada CLI console (`./slim`).
+- [x] **Localization (i18n)**: Menambahkan dukungan multi-bahasa untuk pesan balasan (seperti error validasi / messages) berdasarkan header `Accept-Language` yang dikirim dari *client*.

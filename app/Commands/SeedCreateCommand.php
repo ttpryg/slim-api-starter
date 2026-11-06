@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(
     name: 'seed:create',
     description: 'Creates a new database seeder',
+    aliases: ['make:seeder'],
 )]
 class SeedCreateCommand extends Command
 {

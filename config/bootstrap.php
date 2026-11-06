@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Handler\CustomErrorHandler;
+use App\I18n\Translator;
 use App\Middleware\CorsMiddleware;
+use App\Middleware\LocaleMiddleware;
 use App\Middleware\RateLimitMiddleware;
 use App\Middleware\RequestIdMiddleware;
 use DI\ContainerBuilder;
@@ -45,6 +47,7 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 
 // Register middleware
+$app->add(new LocaleMiddleware($container->get(Translator::class)));
 $app->add(new RequestIdMiddleware($container->get(LoggerInterface::class)));
 $app->add(new RateLimitMiddleware($config->get('rate_limit'), $app->getResponseFactory()));
 $app->add(new CorsMiddleware($config->get('cors'), $app->getResponseFactory()));
