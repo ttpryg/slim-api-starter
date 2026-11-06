@@ -33,3 +33,9 @@ Meskipun *starter* ini sudah sangat solid, masih ada beberapa fitur krusial yang
 - [x] **Generator Command Database Seeder**: Membuat command `make:seeder` (alias `seed:create`) pada CLI terpadu kita untuk mempermudah pembuatan file *seeder*.
 - [x] **CLI Generators Lengkap**: Tambahkan command `make:middleware`, `make:transformer`, `migrate:reset`, dan `migrate:refresh` pada CLI console (`./slim`).
 - [x] **Localization (i18n)**: Menambahkan dukungan multi-bahasa untuk pesan balasan (seperti error validasi / messages) berdasarkan header `Accept-Language` yang dikirim dari *client*.
+
+## 8. Enterprise & Scaling Roadmap
+- [x] **File Storage Abstraction (Flysystem)**: Integrasikan `league/flysystem` dengan multi-driver (`local` dan `s3`) untuk manajemen upload file dan storage disk.
+- [x] **Asynchronous Jobs & Queue Worker**: Integrasikan antrean background jobs via `ttpryg/queue` dan worker command CLI (`php slim queue:work`, `queue:retry`, `queue:failed`, dll.) serta generator command `php slim make:job`.
+- [x] **Caching Layer (PSR-16)**: Sediakan abstraction cache berbasis `SimpleCacheInterface` dengan cache helper method (`remember`, `get`, `set`).
+- [x] **Model Factory Pattern**: Tambahkan model factory generator (`php slim make:factory`) dan integrasi FakerPHP untuk pembuatan dummy data pengujian dan seeding yang ekspresif.
