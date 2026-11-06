@@ -15,10 +15,10 @@ Meskipun *starter* ini sudah sangat solid, masih ada beberapa fitur krusial yang
 - [x] **Custom Error Handler**: *Override* `ErrorHandler` bawaan Slim. Saat ini, error 404 (Not Found) atau 500 (Internal Server Error) masih menampilkan HTML/teks default dari Slim. Handler khusus perlu dibuat agar semua error sistem konsisten menggunakan format JSON dari `ResponseTrait` (`{"success": false, "message": "..."}`).
 
 ## 4. Testing & QA
-- [ ] **Database Testing Trait**: Buat *helper trait* untuk PHPUnit yang akan melakukan migrasi dan *rollback* (atau membungkus dalam *DB Transaction*) sebelum dan sesudah menjalankan *test* agar *database state* tetap bersih.
-- [ ] **Pemisahan Environment (Testing vs Dev)**: Memperbarui `phpunit.xml` dan pengaturan bootstrap agar pengujian (*unit test*) menggunakan database atau environment terpisah (misal SQLite in-memory / `.env.testing`) sehingga tidak merusak data lokal.
-- [ ] **Static Analysis (PHPStan)**: Integrasikan `phpstan/phpstan` (level 6-8) ke dalam pipeline dev/test untuk mendeteksi type mismatch, dead code, dan null-safety sebelum runtime.
-- [ ] **CI/CD Pipeline**: Tambahkan file workflow GitHub Actions (`.github/workflows/main.yml`) untuk menjalankan syntax check, code style (`pint`), static analysis (`phpstan`), dan unit test (`phpunit`) secara otomatis di setiap Pull Request.
+- [x] **Database Testing Trait**: Buat *helper trait* untuk PHPUnit yang akan melakukan migrasi dan *rollback* (atau membungkus dalam *DB Transaction*) sebelum dan sesudah menjalankan *test* agar *database state* tetap bersih.
+- [x] **Pemisahan Environment (Testing vs Dev)**: Memperbarui `phpunit.xml` dan pengaturan bootstrap agar pengujian (*unit test*) menggunakan database atau environment terpisah (misal SQLite in-memory / `.env.testing`) sehingga tidak merusak data lokal.
+- [x] **Static Analysis (PHPStan)**: Integrasikan `phpstan/phpstan` (level 6-8) ke dalam pipeline dev/test untuk mendeteksi type mismatch, dead code, dan null-safety sebelum runtime.
+- [x] **CI/CD Pipeline**: Tambahkan file workflow GitHub Actions (`.github/workflows/main.yml`) untuk menjalankan syntax check, code style (`pint`), static analysis (`phpstan`), dan unit test (`phpunit`) secara otomatis di setiap Pull Request.
 
 ## 5. API Documentation
 - [ ] **Swagger/OpenAPI**: Integrasikan library seperti `zircote/swagger-php` agar dokumentasi API bisa di-generate secara otomatis berdasarkan *attributes/annotations* di class Action dan sediakan viewer UI (Swagger UI / Scalar) di route `/docs`.

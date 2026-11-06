@@ -3,6 +3,11 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
          colors="true">
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="DB_DRIVER" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+    </php>
     <testsuites>
         <testsuite name="App Test Suite">
             <directory>tests</directory>
